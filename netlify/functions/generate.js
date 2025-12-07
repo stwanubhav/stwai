@@ -8,27 +8,28 @@ async function callHuggingFace(model, prompt) {
     throw new Error("Missing HF_API_KEY environment variable");
   }
 
-  const max_new_tokens = model.settings?.max_new_tokens ?? 256;
+  const max_tokens = model.settings?.max_new_tokens ?? 256;
   const temperature = model.settings?.temperature ?? 0.7;
 
-  // Correct new endpoint for HuggingFace
-  const res = await fetch(
-    `https://router.huggingface.co/v1/inference/${model.modelName}`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${HF_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        inputs: prompt,
-        parameters: {
-          max_new_tokens,
-          temperature,
+  // ✅ New, correct Router endpoint (OpenAI-style)
+  const res = await fetch("https://router.huggingface.co/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${HF_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: model.modelName, // e.g. "google/gemma-2-2b-it"
+      messages: [
+        {
+          role: "user",
+          content: prompt,
         },
-      }),
-    }
-  );
+      ],
+      max_tokens,
+      temperature,
+    }),
+  });
 
   if (!res.ok) {
     const text = await res.text();
@@ -37,14 +38,26 @@ async function callHuggingFace(model, prompt) {
 
   const data = await res.json();
 
-  if (Array.isArray(data) && data[0]?.generated_text) {
-    return data[0].generated_text;
-  }
+  // OpenAI-style response: choices[0].message.content
+  const content =
+    data.choices?.[0]?.message?.content || JSON.stringify(data, null, 2);
 
-  return JSON.stringify(data, null, 2);
+  return content;
 }
 
 exports.handler = async (event) => {
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 204,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST,OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+      body: "",
+    };
+  }
+
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -81,6 +94,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({ results }),
     };
@@ -90,6 +104,7 @@ exports.handler = async (event) => {
       statusCode: 500,
       headers: {
         "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({ error: err.message }),
     };
