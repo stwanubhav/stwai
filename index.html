@@ -4,181 +4,1074 @@
   <meta charset="UTF-8" />
   <title>STWAI – Multi-AI Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- Font for better typography -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+
+  <!-- Highlight.js for code syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 
   <style>
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #151515;
+      --bg-tertiary: #202020;
+      --border-color: #333;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --accent-primary: #10a37f;
+      --accent-hover: #0d8c6d;
+      --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      --code-bg: #1a1a1a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: #121212;
-      color: #eee;
-      font-family: system-ui, sans-serif;
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
     }
 
-    textarea {
-      width: 100%;
-      min-height: 90px;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      background: #1f1f1f;
-      color: #fff;
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* Header */
+    .header {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo span {
+      color: var(--accent-primary);
+    }
+
+    .tagline {
       font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 4px;
     }
 
-    button {
-      margin-top: 12px;
-      padding: 10px 18px;
+    /* Main Layout */
+    .main-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 24px 0;
+    }
+
+    @media (min-width: 1024px) {
+      .main-layout {
+        flex-direction: row;
+      }
+    }
+
+    /* Models Panel */
+    .models-panel {
+      flex: 0 0 auto;
+    }
+
+    @media (min-width: 1024px) {
+      .models-panel {
+        width: 320px;
+      }
+    }
+
+    .panel-card {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow);
+    }
+
+    .panel-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .models-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .model-option {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      background: var(--bg-tertiary);
       border-radius: 8px;
-      border: none;
+      border: 1px solid var(--border-color);
       cursor: pointer;
-      background: #4f46e5;
-      color: white;
+      transition: all 0.2s ease;
+    }
+
+    .model-option:hover {
+      border-color: var(--accent-primary);
+      background: rgba(16, 163, 127, 0.05);
+    }
+
+    .model-option input[type="checkbox"] {
+      margin-right: 12px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-primary);
+      cursor: pointer;
+    }
+
+    .model-name {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .model-free {
+      font-size: 12px;
+      color: var(--accent-primary);
+      margin-left: auto;
+      background: rgba(16, 163, 127, 0.1);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .counter {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Chat Area */
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 80vh;
+    }
+
+    /* Responses Container at TOP */
+    .responses-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 24px;
+    }
+
+    .responses-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .responses-title {
+      font-size: 16px;
       font-weight: 600;
     }
 
-    button:hover {
-      background: #6366f1;
+    .layout-toggle {
+      display: flex;
+      background: var(--bg-tertiary);
+      border-radius: 8px;
+      padding: 4px;
+      border: 1px solid var(--border-color);
     }
 
-    .models label {
-      display: block;
-      margin: 6px 0;
+    .layout-btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 13px;
       cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .layout-btn.active {
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    .responses-container {
+      display: grid;
+      gap: 16px;
+      flex: 1;
+      min-height: 400px;
+    }
+
+    .responses-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .responses-side-by-side {
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .responses-stacked {
+      grid-template-columns: 1fr;
+    }
+
+    /* Response Cards */
+    .response-card {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .response-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .model-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
       font-size: 14px;
     }
 
-    .response {
-      background: #1a1a1a;
+    .model-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--accent-primary);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .response-content {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 8px;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    /* Enhanced Formatting */
+    .response-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      background: var(--bg-tertiary);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .response-content th {
+      background: var(--accent-primary);
+      color: white;
+      font-weight: 600;
+      text-align: left;
       padding: 12px;
-      border-radius: 10px;
-      margin-top: 12px;
-      white-space: pre-wrap;
-      border: 1px solid #333;
     }
 
-    h3 {
-      margin-top: 24px;
-      margin-bottom: 8px;
+    .response-content td {
+      padding: 12px;
+      border-top: 1px solid var(--border-color);
     }
 
-    .note {
+    .response-content tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .response-content pre {
+      background: var(--code-bg);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 12px 0;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+    }
+
+    .response-content code {
+      font-family: 'Courier New', monospace;
       font-size: 13px;
-      opacity: 0.8;
+      background: var(--bg-tertiary);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+    }
+
+    .response-content pre code {
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    /* Prompt Container at BOTTOM */
+    .prompt-container {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow);
+      margin-top: auto;
+    }
+
+    .prompt-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .prompt-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 15px;
+      resize: vertical;
+      transition: border-color 0.2s;
+    }
+
+    .prompt-textarea:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+    }
+
+    .send-button {
+      margin-top: 16px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: var(--accent-primary);
+      color: white;
+      font-weight: 600;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .send-button:hover {
+      background: var(--accent-hover);
+    }
+
+    .send-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Loading States */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 200px;
+    }
+
+    .typing-animation {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-primary);
+      border-radius: 50%;
+      animation: typing 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    .typing-dot:nth-child(3) { animation-delay: 0s; }
+
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Footer */
+    .footer {
+      padding: 20px 0;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 13px;
+      border-top: 1px solid var(--border-color);
+      margin-top: 40px;
+    }
+
+    /* Mobile Optimizations */
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 12px;
+      }
+      
+      .header {
+        padding: 16px 0;
+      }
+      
+      .logo {
+        font-size: 20px;
+      }
+      
+      .panel-card, .prompt-container, .response-card {
+        padding: 16px;
+      }
+      
+      .responses-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      
+      .layout-toggle {
+        align-self: flex-start;
+      }
+      
+      .responses-container {
+        grid-template-columns: 1fr !important;
+      }
+      
+      .prompt-textarea {
+        min-height: 100px;
+      }
+    }
+
+    /* Utilities */
+    .hidden {
+      display: none !important;
+    }
+
+    .status-message {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .status-error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    .status-info {
+      background: rgba(16, 163, 127, 0.1);
+      color: var(--accent-primary);
+      border: 1px solid rgba(16, 163, 127, 0.2);
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#10a37f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 17L12 22L22 17" stroke="#10a37f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 12L12 17L22 12" stroke="#10a37f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        STW<span>AI</span>
+      </div>
+      <p class="tagline">Compare multiple AI models side-by-side in one interface</p>
+    </header>
 
-<h1>STWAI – Multi-AI Chat</h1>
-<p>Select up to <b>4 AI models</b> and send one prompt to all.</p>
+    <!-- Main Content -->
+    <div class="main-layout">
+      <!-- Models Panel -->
+      <div class="models-panel">
+        <div class="panel-card">
+          <h3 class="panel-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#10a37f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Available Models
+          </h3>
+          
+          <div class="models-grid" id="modelsContainer">
+            <!-- Models will be populated by JavaScript -->
+          </div>
+          
+          <div class="counter">
+            <span>Selected: <span id="selectedCount">0</span> / 4</span>
+            <span id="selectionStatus">Max 4 models</span>
+          </div>
+        </div>
+        
+        <div class="panel-card">
+          <h3 class="panel-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13 16H12C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8H16M13 12H16M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#10a37f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            How to Use
+          </h3>
+          <p style="font-size: 14px; color: var(--text-secondary);">
+            1. Select up to 4 AI models<br>
+            2. Enter your prompt in the text area<br>
+            3. Click "Send Prompt" to get responses<br>
+            4. Compare results side-by-side
+          </p>
+        </div>
+      </div>
+      
+      <!-- Chat Area -->
+      <div class="chat-area">
+        <!-- Responses Section at TOP -->
+        <div class="responses-section">
+          <div class="responses-header">
+            <h3 class="responses-title">AI Responses</h3>
+            <div class="layout-toggle">
+              <button class="layout-btn active" id="sideBySideBtn" onclick="setLayout('side-by-side')">
+                Side-by-Side
+              </button>
+              <button class="layout-btn" id="stackedBtn" onclick="setLayout('stacked')">
+                Stacked
+              </button>
+            </div>
+          </div>
+          
+          <!-- Status Messages -->
+          <div id="statusMessage" class="hidden"></div>
+          
+          <!-- Responses Container -->
+          <div class="responses-container responses-side-by-side" id="responsesContainer">
+            <!-- Responses will be dynamically inserted here -->
+            <div id="output"></div>
+          </div>
+        </div>
+        
+        <!-- Prompt Container at BOTTOM -->
+        <div class="prompt-container">
+          <h3 class="prompt-title">Your Prompt</h3>
+          <textarea class="prompt-textarea" id="prompt" placeholder="Ask anything to multiple AI models simultaneously..."></textarea>
+          <button class="send-button" id="sendButton" onclick="sendPrompt()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Send Prompt
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+      <p>STWAI – Multi-AI Chat Interface | Compare responses from multiple AI models in real time</p>
+    </footer>
+  </div>
 
-<div class="models">
-  <h3>Available Models</h3>
-
-  <label>
-    <input type="checkbox" value="nvidia/nemotron-3-nano-30b-a3b:free">
-    Nemotron-3 Nano 30B (FREE)
-  </label>
-
-  <label>
-    <input type="checkbox" value="nvidia/nemotron-nano-12b-v2-vl:free">
-    Nemotron Nano 12B V2-VL (FREE)
-  </label>
-
-  <label>
-    <input type="checkbox" value="deepseek/deepseek-r1">
-    DeepSeek-R1
-  </label>
-
-  <label>
-    <input type="checkbox" value="meta-llama/llama-3-70b-instruct">
-    LLaMA-3 70B
-  </label>
-
-  <label>
-    <input type="checkbox" value="meta-llama/llama-3.3-70b-instruct:free">
-    LLaMA-3.3 70B (FREE)
-  </label>
-
-  <label>
-    <input type="checkbox" value="mistralai/mixtral-8x7b-instruct">
-    Mixtral 8×7B
-  </label>
-
-  <label>
-    <input type="checkbox" value="liquid/lfm-2.5-1.2b-instruct:free">
-    Liquid LFM-2.5 1.2B (FREE)
-  </label>
-
-  <label>
-    <input type="checkbox" value="google/gemma-3n-e2b-it:free">
-    Gemma-3N E2B-IT (FREE)
-  </label>
-
-  <label>
-    <input type="checkbox" value="google/gemma-3n-e4b-it:free">
-    Gemma-3N E4B-IT (FREE)
-  </label>
-
-  <p class="note">⚠ Max 4 models allowed per request</p>
-</div>
-
-<h3>Prompt</h3>
-<textarea id="prompt" placeholder="Ask anything…"></textarea>
-
-<button onclick="send()">Send Prompt</button>
-
-<div id="output"></div>
-
-<script>
-const API_URL = "http://217.160.125.125:13083/api/chat"; // change if needed
-
-function send() {
-  const prompt = document.getElementById("prompt").value.trim();
-  const checked = [...document.querySelectorAll("input[type=checkbox]:checked")];
-
-  if (!prompt) {
-    alert("Please enter a prompt");
-    return;
-  }
-
-  if (checked.length === 0) {
-    alert("Select at least one model");
-    return;
-  }
-
-  if (checked.length > 4) {
-    alert("You can select maximum 4 models");
-    return;
-  }
-
-  const models = checked.map(cb => cb.value);
-  const output = document.getElementById("output");
-
-  output.innerHTML = "<p>⏳ Waiting for AI responses...</p>";
-
-  fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt, models })
-  })
-  .then(res => res.json())
-  .then(data => {
-    output.innerHTML = "";
-
-    for (const model in data.responses) {
-      const div = document.createElement("div");
-      div.className = "response";
-      div.innerHTML = `<b>${model}</b>\n\n${data.responses[model]}`;
-      output.appendChild(div);
+  <script>
+    const API_URL = "http://217.160.125.125:13083/api/chat";
+    
+    // Available models data
+    const models = [
+      { id: "nvidia/nemotron-3-nano-30b-a3b:free", name: "Nemotron-3 Nano 30B", free: true },
+      { id: "nvidia/nemotron-nano-12b-v2-vl:free", name: "Nemotron Nano 12B V2-VL", free: true },
+      { id: "deepseek/deepseek-r1", name: "DeepSeek-R1", free: false },
+      { id: "meta-llama/llama-3-70b-instruct", name: "LLaMA-3 70B", free: false },
+      { id: "meta-llama/llama-3.3-70b-instruct:free", name: "LLaMA-3.3 70B", free: true },
+      { id: "mistralai/mixtral-8x7b-instruct", name: "Mixtral 8×7B", free: false },
+      { id: "liquid/lfm-2.5-1.2b-instruct:free", name: "Liquid LFM-2.5 1.2B", free: true },
+      { id: "google/gemma-3n-e2b-it:free", name: "Gemma-3N E2B-IT", free: true },
+      { id: "google/gemma-3n-e4b-it:free", name: "Gemma-3N E4B-IT", free: true }
+    ];
+    
+    // Current state
+    let selectedModels = [];
+    let currentLayout = 'side-by-side';
+    
+    // Initialize the page
+    function init() {
+      renderModels();
+      updateSelectedCount();
+      setupEventListeners();
+      updateResponsesGrid();
     }
-  })
-  .catch(err => {
-    output.innerHTML = `<div class="response">❌ Error: ${err}</div>`;
-  });
-}
-</script>
-
+    
+    // Render available models
+    function renderModels() {
+      const container = document.getElementById('modelsContainer');
+      container.innerHTML = '';
+      
+      models.forEach(model => {
+        const option = document.createElement('div');
+        option.className = 'model-option';
+        option.innerHTML = `
+          <input type="checkbox" value="${model.id}" id="${model.id}">
+          <label for="${model.id}" class="model-name">${model.name}</label>
+          ${model.free ? '<span class="model-free">FREE</span>' : ''}
+        `;
+        
+        container.appendChild(option);
+      });
+      
+      // Add event listeners to checkboxes
+      document.querySelectorAll('.model-option input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', handleModelSelection);
+      });
+    }
+    
+    // Handle model selection
+    function handleModelSelection() {
+      const checkedBoxes = document.querySelectorAll('.model-option input[type="checkbox"]:checked');
+      selectedModels = Array.from(checkedBoxes).map(cb => cb.value);
+      
+      // Limit to 4 selections
+      if (selectedModels.length > 4) {
+        this.checked = false;
+        selectedModels = selectedModels.filter(id => id !== this.value);
+        showStatus('You can select maximum 4 models', 'error');
+      }
+      
+      updateSelectedCount();
+      updateResponsesGrid();
+    }
+    
+    // Update selected models counter
+    function updateSelectedCount() {
+      const countElement = document.getElementById('selectedCount');
+      const statusElement = document.getElementById('selectionStatus');
+      
+      countElement.textContent = selectedModels.length;
+      
+      if (selectedModels.length === 0) {
+        statusElement.textContent = 'Select at least 1 model';
+        statusElement.style.color = 'var(--text-secondary)';
+      } else if (selectedModels.length === 4) {
+        statusElement.textContent = 'Maximum reached';
+        statusElement.style.color = '#ef4444';
+      } else {
+        statusElement.textContent = 'Max 4 models';
+        statusElement.style.color = 'var(--text-secondary)';
+      }
+    }
+    
+    // Update responses grid based on selected models count
+    function updateResponsesGrid() {
+      const container = document.getElementById('responsesContainer');
+      const count = Math.max(selectedModels.length, 1);
+      
+      // Clear current content
+      container.innerHTML = '';
+      
+      // Create empty response cards for each selected model
+      if (selectedModels.length > 0) {
+        selectedModels.forEach(modelId => {
+          const modelInfo = models.find(m => m.id === modelId);
+          if (modelInfo) {
+            const card = createEmptyResponseCard(modelInfo);
+            container.appendChild(card);
+          }
+        });
+      } else {
+        // Show empty state when no models selected
+        const emptyCard = document.createElement('div');
+        emptyCard.className = 'response-card';
+        emptyCard.innerHTML = `
+          <div class="response-header">
+            <div class="model-badge">
+              <div class="model-icon">?</div>
+              <span>No Model Selected</span>
+            </div>
+          </div>
+          <div class="response-content">
+            <p style="color: var(--text-secondary); text-align: center; padding: 40px 0;">
+              Select AI models from the left panel to see their responses here
+            </p>
+          </div>
+        `;
+        container.appendChild(emptyCard);
+      }
+      
+      // Update grid layout
+      updateGridLayout();
+    }
+    
+    // Create empty response card
+    function createEmptyResponseCard(modelInfo) {
+      const card = document.createElement('div');
+      card.className = 'response-card';
+      card.id = `card-${modelInfo.id}`;
+      card.innerHTML = `
+        <div class="response-header">
+          <div class="model-badge">
+            <div class="model-icon">${modelInfo.name.charAt(0)}</div>
+            <span>${modelInfo.name}</span>
+          </div>
+          ${modelInfo.free ? '<span class="model-free">FREE</span>' : ''}
+        </div>
+        <div class="response-content" id="content-${modelInfo.id}">
+          <div class="loading">
+            <div class="typing-animation">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+          </div>
+        </div>
+      `;
+      return card;
+    }
+    
+    // Update grid layout based on current layout
+    function updateGridLayout() {
+      const container = document.getElementById('responsesContainer');
+      
+      if (currentLayout === 'side-by-side') {
+        container.classList.remove('responses-stacked');
+        container.classList.add('responses-side-by-side');
+        
+        // Adjust grid columns based on screen width and model count
+        if (window.innerWidth <= 768) {
+          container.style.gridTemplateColumns = '1fr';
+        } else if (window.innerWidth <= 1024) {
+          if (selectedModels.length <= 2) {
+            container.style.gridTemplateColumns = 'repeat(2, 1fr)';
+          } else {
+            container.style.gridTemplateColumns = '1fr';
+          }
+        } else {
+          if (selectedModels.length === 1) {
+            container.style.gridTemplateColumns = '1fr';
+          } else if (selectedModels.length === 2) {
+            container.style.gridTemplateColumns = 'repeat(2, 1fr)';
+          } else if (selectedModels.length === 3) {
+            container.style.gridTemplateColumns = 'repeat(3, 1fr)';
+          } else if (selectedModels.length === 4) {
+            container.style.gridTemplateColumns = 'repeat(2, 1fr)';
+          }
+        }
+      } else {
+        container.classList.remove('responses-side-by-side');
+        container.classList.add('responses-stacked');
+        container.style.gridTemplateColumns = '1fr';
+      }
+    }
+    
+    // Set response layout
+    function setLayout(layout) {
+      currentLayout = layout;
+      const sideBySideBtn = document.getElementById('sideBySideBtn');
+      const stackedBtn = document.getElementById('stackedBtn');
+      
+      // Update button states
+      if (layout === 'side-by-side') {
+        sideBySideBtn.classList.add('active');
+        stackedBtn.classList.remove('active');
+      } else {
+        stackedBtn.classList.add('active');
+        sideBySideBtn.classList.remove('active');
+      }
+      
+      updateGridLayout();
+    }
+    
+    // Show status message
+    function showStatus(message, type = 'info') {
+      const statusElement = document.getElementById('statusMessage');
+      statusElement.textContent = message;
+      statusElement.className = `status-message status-${type}`;
+      statusElement.classList.remove('hidden');
+      
+      // Auto-hide info messages after 5 seconds
+      if (type === 'info') {
+        setTimeout(() => {
+          statusElement.classList.add('hidden');
+        }, 5000);
+      }
+    }
+    
+    // Enhanced format response with proper table formatting
+    function formatResponse(text) {
+      if (!text) return 'No response received';
+      
+      let formatted = text;
+      
+      // Format tables with proper markdown-like syntax
+      formatted = formatted.replace(/\| ([^|]+) \| ([^|]+) \| ([^|]+) \|/g, (match, col1, col2, col3) => {
+        return `<table>
+          <thead>
+            <tr>
+              <th>${col1}</th>
+              <th>${col2}</th>
+              <th>${col3}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>${col1}</td>
+              <td>${col2}</td>
+              <td>${col3}</td>
+            </tr>
+          </tbody>
+        </table>`;
+      });
+      
+      // Format example table from your request
+      formatted = formatted.replace(/\| Pitfall \| Why.*?\n\|.*?\n\|.*?\n/gms, (match) => {
+        const lines = match.trim().split('\n');
+        if (lines.length >= 2) {
+          let tableHtml = '<table><thead><tr>';
+          
+          // Parse headers
+          const headers = lines[0].split('|').filter(h => h.trim()).map(h => h.trim());
+          headers.forEach(header => {
+            tableHtml += `<th>${header}</th>`;
+          });
+          tableHtml += '</tr></thead><tbody>';
+          
+          // Parse rows
+          for (let i = 2; i < lines.length; i++) {
+            const cells = lines[i].split('|').filter(c => c.trim()).map(c => c.trim());
+            if (cells.length === headers.length) {
+              tableHtml += '<tr>';
+              cells.forEach(cell => {
+                tableHtml += `<td>${cell}</td>`;
+              });
+              tableHtml += '</tr>';
+            }
+          }
+          
+          tableHtml += '</tbody></table>';
+          return tableHtml;
+        }
+        return match;
+      });
+      
+      // Format code blocks
+      formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+        const language = lang || 'plaintext';
+        return `<pre><code class="language-${language}">${escapeHtml(code.trim())}</code></pre>`;
+      });
+      
+      // Format inline code
+      formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+      
+      // Format bold text
+      formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      
+      // Format italic text
+      formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      
+      // Format lists
+      formatted = formatted.replace(/^\s*[-*]\s+(.+)/gm, '<li>$1</li>');
+      formatted = formatted.replace(/(<li>.*<\/li>\n?)+/g, (match) => {
+        return '<ul>' + match + '</ul>';
+      });
+      
+      // Format numbered lists
+      formatted = formatted.replace(/^\s*\d+\.\s+(.+)/gm, '<li>$1</li>');
+      formatted = formatted.replace(/(<li>.*<\/li>\n?)+/g, (match) => {
+        return '<ol>' + match + '</ol>';
+      });
+      
+      // Convert newlines to <br> except inside code blocks
+      const lines = formatted.split('\n');
+      let inCodeBlock = false;
+      let result = [];
+      
+      for (let line of lines) {
+        if (line.includes('<pre>')) inCodeBlock = true;
+        if (line.includes('</pre>')) inCodeBlock = false;
+        
+        if (!inCodeBlock && !line.match(/^<\/?(ul|ol|li|table|tr|td|th|thead|tbody)>/)) {
+          result.push(line + '<br>');
+        } else {
+          result.push(line);
+        }
+      }
+      
+      return result.join('\n');
+    }
+    
+    // Escape HTML
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    // Send prompt to API
+    async function sendPrompt() {
+      const prompt = document.getElementById('prompt').value.trim();
+      const sendButton = document.getElementById('sendButton');
+      
+      // Validation
+      if (!prompt) {
+        showStatus('Please enter a prompt', 'error');
+        return;
+      }
+      
+      if (selectedModels.length === 0) {
+        showStatus('Select at least one model', 'error');
+        return;
+      }
+      
+      // Disable button
+      sendButton.disabled = true;
+      sendButton.innerHTML = `
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation: spin 1s linear infinite;">
+          <path d="M12 2V6M12 18V22M6 12H2M22 12H18M19.07 4.93L16.24 7.76M7.76 16.24L4.93 19.07M19.07 19.07L16.24 16.24M7.76 7.76L4.93 4.93" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Processing...
+      `;
+      
+      // Show typing animations in all response cards
+      selectedModels.forEach(modelId => {
+        const contentDiv = document.getElementById(`content-${modelId}`);
+        if (contentDiv) {
+          contentDiv.innerHTML = `
+            <div class="loading">
+              <div class="typing-animation">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+            </div>
+          `;
+        }
+      });
+      
+      // Hide status message
+      document.getElementById('statusMessage').classList.add('hidden');
+      
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            prompt, 
+            models: selectedModels 
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Display responses
+        if (data.responses && Object.keys(data.responses).length > 0) {
+          for (const modelId in data.responses) {
+            const modelInfo = models.find(m => m.id === modelId);
+            const responseText = data.responses[modelId] || 'No response received';
+            const contentDiv = document.getElementById(`content-${modelId}`);
+            
+            if (contentDiv) {
+              contentDiv.innerHTML = formatResponse(responseText);
+            }
+          }
+          
+          // Apply syntax highlighting
+          setTimeout(() => {
+            document.querySelectorAll('pre code').forEach((block) => {
+              hljs.highlightElement(block);
+            });
+          }, 100);
+          
+          showStatus(`Received responses from ${Object.keys(data.responses).length} model(s)`, 'info');
+        } else {
+          showStatus('No responses received from the API', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        
+        // Show error in all response cards
+        selectedModels.forEach(modelId => {
+          const contentDiv = document.getElementById(`content-${modelId}`);
+          if (contentDiv) {
+            contentDiv.innerHTML = `
+              <div style="color: #ef4444;">
+                <strong>Error:</strong> ${error.message}
+              </div>
+            `;
+          }
+        });
+        
+        showStatus(`Error: ${error.message}`, 'error');
+      } finally {
+        // Re-enable button
+        sendButton.disabled = false;
+        sendButton.innerHTML = `
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Send Prompt
+        `;
+      }
+    }
+    
+    // Setup event listeners
+    function setupEventListeners() {
+      // Enter key to send prompt (Ctrl+Enter or Cmd+Enter)
+      document.getElementById('prompt').addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          sendPrompt();
+        }
+      });
+      
+      // Clear status message on prompt focus
+      document.getElementById('prompt').addEventListener('focus', () => {
+        document.getElementById('statusMessage').classList.add('hidden');
+      });
+      
+      // Handle window resize
+      window.addEventListener('resize', updateGridLayout);
+    }
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
 </body>
 </html>
