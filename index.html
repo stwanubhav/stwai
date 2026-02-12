@@ -1,518 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chat - GitHub Pages</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #333;
-            font-size: 2.5em;
-        }
-        
-        .status {
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: bold;
-        }
-        
-        .status.connected {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .status.disconnected {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-        }
-        
-        textarea {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
-            resize: vertical;
-            min-height: 100px;
-            font-family: inherit;
-        }
-        
-        textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .model-selector {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-        
-        .model-btn {
-            padding: 10px 20px;
-            background: #f1f3f4;
-            border: 2px solid #ddd;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .model-btn:hover {
-            background: #e8eaed;
-        }
-        
-        .model-btn.selected {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-        
-        .button-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-        
-        button {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            flex: 1;
-        }
-        
-        .primary-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .primary-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-        
-        .secondary-btn {
-            background: #f1f3f4;
-            color: #333;
-        }
-        
-        .secondary-btn:hover {
-            background: #e8eaed;
-        }
-        
-        .response-container {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 1px solid #e9ecef;
-            display: none;
-        }
-        
-        .response-container.active {
-            display: block;
-            animation: fadeIn 0.5s;
-        }
-        
-        .response-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e9ecef;
-        }
-        
-        .model-name {
-            font-weight: bold;
-            color: #667eea;
-            font-size: 1.2em;
-        }
-        
-        .response-content {
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #667eea;
-        }
-        
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .api-info {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #ddd;
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .api-info code {
-            background: #f1f3f4;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            color: white;
-            font-size: 14px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>STWAI – Multi-AI Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <style>
+    body {
+      background: #121212;
+      color: #eee;
+      font-family: system-ui, sans-serif;
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 90px;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #1f1f1f;
+      color: #fff;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background: #4f46e5;
+      color: white;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: #6366f1;
+    }
+
+    .models label {
+      display: block;
+      margin: 6px 0;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .response {
+      background: #1a1a1a;
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 12px;
+      white-space: pre-wrap;
+      border: 1px solid #333;
+    }
+
+    h3 {
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+
+    .note {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🤖 AI Chat Interface</h1>
-        
-        <div id="status" class="status">
-            Checking API connection...
-        </div>
-        
-        <div class="input-group">
-            <label for="prompt"><strong>Your Prompt:</strong></label>
-            <textarea id="prompt" placeholder="Type your question here...">Explain quantum computing in simple terms</textarea>
-        </div>
-        
-        <div class="model-selector">
-            <label><strong>Select AI Models:</strong></label>
-            <div>
-                <span class="model-btn" data-model="gpt-3.5-turbo">GPT-3.5</span>
-                <span class="model-btn selected" data-model="gpt-4">GPT-4</span>
-                <span class="model-btn" data-model="claude-2">Claude 2</span>
-                <span class="model-btn" data-model="llama-2-13b-chat">Llama 2</span>
-            </div>
-        </div>
-        
-        <div class="button-group">
-            <button class="primary-btn" onclick="sendMessage()">
-                🚀 Get AI Responses
-            </button>
-            <button class="secondary-btn" onclick="clearAll()">
-                🗑️ Clear
-            </button>
-        </div>
-        
-        <div id="responses"></div>
-        
-        <div id="error-container" class="error" style="display: none;"></div>
-        
-        <div class="api-info">
-            <p><strong>Backend Status:</strong> <span id="backend-status">Checking...</span></p>
-            <p><strong>API URL:</strong> <code id="api-url">http://217.160.125.125:13083</code></p>
-            <p><strong>GitHub Pages:</strong> <code id="github-url">https://yourusername.github.io</code></p>
-        </div>
-    </div>
-    
-    <footer>
-        <p>Powered by FastAPI Backend | Deployed on GitHub Pages</p>
-    </footer>
 
-    <script>
-        // Configuration
-        const BACKEND_URL = 'http://zenoxapi.jubairsensei.site/api/chat';
-        const GITHUB_PAGES_URL = window.location.origin;
-        
-        // DOM Elements
-        const statusEl = document.getElementById('status');
-        const backendStatusEl = document.getElementById('backend-status');
-        const apiUrlEl = document.getElementById('api-url');
-        const githubUrlEl = document.getElementById('github-url');
-        const errorContainer = document.getElementById('error-container');
-        
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            apiUrlEl.textContent = BACKEND_URL;
-            githubUrlEl.textContent = GITHUB_PAGES_URL;
-            
-            // Test backend connection
-            testBackendConnection();
-            
-            // Setup model selection
-            setupModelSelection();
-        });
-        
-        // Setup model selection
-        function setupModelSelection() {
-            const modelBtns = document.querySelectorAll('.model-btn');
-            modelBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    this.classList.toggle('selected');
-                });
-            });
-        }
-        
-        // Get selected models
-        function getSelectedModels() {
-            const selected = document.querySelectorAll('.model-btn.selected');
-            return Array.from(selected).map(btn => btn.dataset.model);
-        }
-        
-        // Test backend connection
-        async function testBackendConnection() {
-            try {
-                // Use fetch with no-cors mode to check if server is reachable
-                const response = await fetch(`${BACKEND_URL}/health`, {
-                    method: 'GET',
-                    mode: 'no-cors'  // This allows us to check connectivity without CORS
-                });
-                
-                // If we get here without error, server is reachable
-                statusEl.className = 'status connected';
-                statusEl.textContent = '✅ Backend connected successfully';
-                backendStatusEl.textContent = 'Online';
-                backendStatusEl.style.color = 'green';
-                
-            } catch (error) {
-                console.log('Direct connection failed, trying proxy method...');
-                
-                // Try using a CORS proxy
-                try {
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(BACKEND_URL + '/health')}`;
-                    const response = await fetch(proxyUrl);
-                    const data = await response.json();
-                    
-                    if (data.contents) {
-                        statusEl.className = 'status connected';
-                        statusEl.textContent = '✅ Backend connected via proxy';
-                        backendStatusEl.textContent = 'Online (via proxy)';
-                        backendStatusEl.style.color = 'green';
-                    } else {
-                        throw new Error('Proxy connection failed');
-                    }
-                } catch (proxyError) {
-                    statusEl.className = 'status disconnected';
-                    statusEl.textContent = '⚠️ Backend connection failed. Using fallback method.';
-                    backendStatusEl.textContent = 'Offline';
-                    backendStatusEl.style.color = 'red';
-                }
-            }
-        }
-        
-        // Send message to AI
-        async function sendMessage() {
-            const prompt = document.getElementById('prompt').value.trim();
-            const selectedModels = getSelectedModels();
-            
-            if (!prompt) {
-                showError('Please enter a prompt');
-                return;
-            }
-            
-            if (selectedModels.length === 0) {
-                showError('Please select at least one AI model');
-                return;
-            }
-            
-            // Clear previous responses and errors
-            document.getElementById('responses').innerHTML = '';
-            hideError();
-            
-            // Show loading
-            document.getElementById('responses').innerHTML = `
-                <div class="loading">
-                    <p>⏳ Querying AI models... This may take a moment</p>
-                </div>
-            `;
-            
-            try {
-                const responses = await callBackendAPI(prompt, selectedModels);
-                displayResponses(responses);
-            } catch (error) {
-                showError(`Failed to get responses: ${error.message}`);
-            }
-        }
-        
-        // Call backend API with retry logic
-        async function callBackendAPI(prompt, models) {
-            const payload = {
-                prompt: prompt,
-                models: models
-            };
-            
-            // Method 1: Try direct connection (might fail due to CORS)
-            try {
-                console.log('Trying direct connection...');
-                const response = await fetch(`${BACKEND_URL}/api/chat`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Direct connection successful');
-                    return data.responses;
-                }
-            } catch (directError) {
-                console.log('Direct connection failed:', directError.message);
-            }
-            
-            // Method 2: Try CORS proxy
-            console.log('Trying CORS proxy...');
-            const proxyUrls = [
-                'https://api.allorigins.win/raw?url=',
-                'https://corsproxy.io/?',
-                'https://thingproxy.freeboard.io/fetch/'
-            ];
-            
-            for (const proxy of proxyUrls) {
-                try {
-                    const proxyUrl = proxy + encodeURIComponent(BACKEND_URL + '/api/chat');
-                    const response = await fetch(proxyUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        },
-                        body: JSON.stringify(payload),
-                        timeout: 30000
-                    });
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        console.log(`Proxy ${proxy} successful`);
-                        return data.responses;
-                    }
-                } catch (proxyError) {
-                    console.log(`Proxy ${proxy} failed:`, proxyError.message);
-                }
-            }
-            
-            // Method 3: Fallback to mock data
-            console.log('Using fallback responses');
-            return generateFallbackResponses(prompt, models);
-        }
-        
-        // Generate fallback responses if API fails
-        function generateFallbackResponses(prompt, models) {
-            const responses = {};
-            models.forEach(model => {
-                responses[model] = `This is a simulated response from ${model} for: "${prompt}"\n\nSince the backend API is not directly accessible from GitHub Pages due to CORS restrictions, you need to:\n\n1. Enable CORS on your backend server\n2. Or use a proxy service\n3. Or deploy backend with HTTPS\n\nCurrent backend: ${BACKEND_URL}`;
-            });
-            return responses;
-        }
-        
-        // Display responses
-        function displayResponses(responses) {
-            const responsesContainer = document.getElementById('responses');
-            
-            if (!responses || Object.keys(responses).length === 0) {
-                responsesContainer.innerHTML = '<div class="error">No responses received</div>';
-                return;
-            }
-            
-            let html = '';
-            Object.entries(responses).forEach(([model, response]) => {
-                html += `
-                    <div class="response-container active">
-                        <div class="response-header">
-                            <span class="model-name">${model}</span>
-                            <button onclick="copyResponse('${model}')" style="padding:5px 10px;background:#667eea;color:white;border:none;border-radius:5px;cursor:pointer">
-                                📋 Copy
-                            </button>
-                        </div>
-                        <div class="response-content">${escapeHtml(response)}</div>
-                    </div>
-                `;
-            });
-            
-            responsesContainer.innerHTML = html;
-        }
-        
-        // Copy response to clipboard
-        function copyResponse(model) {
-            const responseText = document.querySelector(`[data-model="${model}"]`)?.textContent || '';
-            navigator.clipboard.writeText(responseText).then(() => {
-                alert(`Copied ${model} response to clipboard!`);
-            });
-        }
-        
-        // Clear all
-        function clearAll() {
-            document.getElementById('prompt').value = '';
-            document.getElementById('responses').innerHTML = '';
-            hideError();
-        }
-        
-        // Error handling
-        function showError(message) {
-            errorContainer.textContent = message;
-            errorContainer.style.display = 'block';
-        }
-        
-        function hideError() {
-            errorContainer.style.display = 'none';
-        }
-        
-        // Utility function to escape HTML
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML.replace(/\n/g, '<br>');
-        }
-        
-        // Add keyboard shortcut (Ctrl+Enter to send)
-        document.getElementById('prompt').addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    </script>
+<h1>STWAI – Multi-AI Chat</h1>
+<p>Select up to <b>4 AI models</b> and send one prompt to all.</p>
+
+<div class="models">
+  <h3>Available Models</h3>
+
+  <label>
+    <input type="checkbox" value="nvidia/nemotron-3-nano-30b-a3b:free">
+    Nemotron-3 Nano 30B (FREE)
+  </label>
+
+  <label>
+    <input type="checkbox" value="nvidia/nemotron-nano-12b-v2-vl:free">
+    Nemotron Nano 12B V2-VL (FREE)
+  </label>
+
+  <label>
+    <input type="checkbox" value="deepseek/deepseek-r1">
+    DeepSeek-R1
+  </label>
+
+  <label>
+    <input type="checkbox" value="meta-llama/llama-3-70b-instruct">
+    LLaMA-3 70B
+  </label>
+
+  <label>
+    <input type="checkbox" value="meta-llama/llama-3.3-70b-instruct:free">
+    LLaMA-3.3 70B (FREE)
+  </label>
+
+  <label>
+    <input type="checkbox" value="mistralai/mixtral-8x7b-instruct">
+    Mixtral 8×7B
+  </label>
+
+  <label>
+    <input type="checkbox" value="liquid/lfm-2.5-1.2b-instruct:free">
+    Liquid LFM-2.5 1.2B (FREE)
+  </label>
+
+  <label>
+    <input type="checkbox" value="google/gemma-3n-e2b-it:free">
+    Gemma-3N E2B-IT (FREE)
+  </label>
+
+  <label>
+    <input type="checkbox" value="google/gemma-3n-e4b-it:free">
+    Gemma-3N E4B-IT (FREE)
+  </label>
+
+  <p class="note">⚠ Max 4 models allowed per request</p>
+</div>
+
+<h3>Prompt</h3>
+<textarea id="prompt" placeholder="Ask anything…"></textarea>
+
+<button onclick="send()">Send Prompt</button>
+
+<div id="output"></div>
+
+<script>
+const API_URL = "http://zenoxapi.jubairsensei.site/api/chat"; // change if needed
+
+function send() {
+  const prompt = document.getElementById("prompt").value.trim();
+  const checked = [...document.querySelectorAll("input[type=checkbox]:checked")];
+
+  if (!prompt) {
+    alert("Please enter a prompt");
+    return;
+  }
+
+  if (checked.length === 0) {
+    alert("Select at least one model");
+    return;
+  }
+
+  if (checked.length > 4) {
+    alert("You can select maximum 4 models");
+    return;
+  }
+
+  const models = checked.map(cb => cb.value);
+  const output = document.getElementById("output");
+
+  output.innerHTML = "<p>⏳ Waiting for AI responses...</p>";
+
+  fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt, models })
+  })
+  .then(res => res.json())
+  .then(data => {
+    output.innerHTML = "";
+
+    for (const model in data.responses) {
+      const div = document.createElement("div");
+      div.className = "response";
+      div.innerHTML = `<b>${model}</b>\n\n${data.responses[model]}`;
+      output.appendChild(div);
+    }
+  })
+  .catch(err => {
+    output.innerHTML = `<div class="response">❌ Error: ${err}</div>`;
+  });
+}
+</script>
+
 </body>
 </html>
