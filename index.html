@@ -5,15 +5,15 @@
   <title>STWAI – Multi-AI Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   
-  <!-- Font for better typography -->
+  <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&display=swap">
 
-  <!-- Highlight.js for code syntax highlighting -->
+  <!-- Highlight.js -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
   
-  <!-- Load all common languages -->
+  <!-- Load all languages -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
@@ -32,11 +32,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/ruby.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/swift.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/kotlin.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/scala.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/perl.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/markdown.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
 
   <style>
     :root {
@@ -52,8 +47,8 @@
       --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
       --code-bg: #1a1a1a;
       --inline-code-bg: #2a2a2a;
-      --table-header-bg: #2a2a2a;
-      --table-row-hover: rgba(16, 163, 127, 0.1);
+      --line-number-color: #6b7280;
+      --cursor-color: #10a37f;
     }
 
     * {
@@ -65,7 +60,7 @@
     body {
       background: var(--bg-primary);
       color: var(--text-primary);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      font-family: 'Inter', sans-serif;
       line-height: 1.6;
       min-height: 100vh;
     }
@@ -80,12 +75,11 @@
     .header {
       padding: 24px 0;
       border-bottom: 1px solid var(--border-color);
-      background: var(--bg-primary);
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(10px);
       position: sticky;
       top: 0;
       z-index: 100;
-      backdrop-filter: blur(10px);
-      background: rgba(10, 10, 10, 0.95);
     }
 
     .logo {
@@ -97,7 +91,6 @@
     }
 
     .logo span {
-      color: var(--accent-primary);
       background: linear-gradient(135deg, #10a37f, #6366f1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -141,11 +134,6 @@
       margin-bottom: 20px;
       border: 1px solid var(--border-color);
       box-shadow: var(--card-shadow);
-      transition: transform 0.2s;
-    }
-
-    .panel-card:hover {
-      transform: translateY(-2px);
     }
 
     .panel-title {
@@ -155,12 +143,10 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      color: var(--text-primary);
     }
 
     .models-grid {
       display: grid;
-      grid-template-columns: 1fr;
       gap: 12px;
       max-height: 400px;
       overflow-y: auto;
@@ -193,7 +179,7 @@
       border-radius: 10px;
       border: 1px solid var(--border-color);
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.2s;
     }
 
     .model-option:hover {
@@ -207,7 +193,6 @@
       width: 18px;
       height: 18px;
       accent-color: var(--accent-primary);
-      cursor: pointer;
     }
 
     .model-name {
@@ -223,7 +208,6 @@
       padding: 4px 10px;
       border-radius: 20px;
       font-weight: 600;
-      letter-spacing: 0.3px;
     }
 
     .counter {
@@ -245,7 +229,7 @@
       gap: 28px;
     }
 
-    /* Responses Section at TOP */
+    /* Responses Section */
     .responses-section {
       flex: 1;
       display: flex;
@@ -310,7 +294,7 @@
       display: flex;
       flex-direction: column;
       height: 100%;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s;
       position: relative;
       overflow: hidden;
     }
@@ -376,93 +360,15 @@
       padding-right: 4px;
     }
 
-    /* Fast Table Formatting */
-    .response-content table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 16px 0;
-      background: var(--bg-tertiary);
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-      font-size: 14px;
-      display: table;
-      table-layout: fixed;
-    }
-
-    .response-content thead {
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      display: table-header-group;
-    }
-
-    .response-content th {
-      color: white;
-      font-weight: 600;
-      text-align: left;
-      padding: 14px 16px;
-      font-size: 14px;
-      border-right: 1px solid rgba(255, 255, 255, 0.1);
-      white-space: nowrap;
-    }
-
-    .response-content th:last-child {
-      border-right: none;
-    }
-
-    .response-content tbody {
-      display: table-row-group;
-    }
-
-    .response-content tr {
-      display: table-row;
-      transition: background-color 0.2s;
-    }
-
-    .response-content td {
-      padding: 12px 16px;
-      border-top: 1px solid var(--border-color);
-      border-right: 1px solid var(--border-color);
-      color: var(--text-primary);
-      line-height: 1.6;
-      display: table-cell;
-      word-break: break-word;
-    }
-
-    .response-content td:last-child {
-      border-right: none;
-    }
-
-    .response-content tbody tr:nth-child(even) {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .response-content tbody tr:hover {
-      background: var(--table-row-hover);
-    }
-
-    /* Professional Code Formatting - Preserve Structure */
+    /* Professional Code Formatting with Line Numbers */
     .response-content pre {
+      position: relative;
       background: var(--code-bg);
       border-radius: 12px;
-      padding: 20px;
-      margin: 16px 0;
-      overflow-x: auto;
+      margin: 20px 0;
+      padding: 0;
       border: 1px solid var(--border-color);
-      position: relative;
-      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.5);
-      white-space: pre;
-      word-wrap: normal;
-      tab-size: 4;
-    }
-
-    .response-content pre code {
-      font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
-      font-size: 14px;
-      line-height: 1.5;
-      white-space: pre;
-      display: block;
-      min-width: 100%;
-      float: left;
+      overflow: hidden;
     }
 
     .response-content pre::before {
@@ -477,130 +383,140 @@
       font-weight: 600;
       border-radius: 0 12px 0 12px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      z-index: 20;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      z-index: 10;
     }
 
-    /* Inline Code */
+    .code-block-wrapper {
+      display: flex;
+      background: var(--code-bg);
+      counter-reset: line;
+      max-height: 500px;
+      overflow: auto;
+    }
+
+    .line-numbers {
+      padding: 20px 0 20px 16px;
+      text-align: right;
+      background: var(--code-bg);
+      border-right: 1px solid var(--border-color);
+      user-select: none;
+      min-width: 50px;
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--line-number-color);
+      white-space: pre;
+    }
+
+    .line-numbers span {
+      counter-increment: line;
+      display: block;
+    }
+
+    .line-numbers span::before {
+      content: counter(line);
+      display: block;
+      color: var(--line-number-color);
+      opacity: 0.7;
+      font-size: 12px;
+    }
+
+    .code-content {
+      flex: 1;
+      padding: 20px;
+      overflow-x: auto;
+      background: var(--code-bg);
+    }
+
+    .code-content pre {
+      margin: 0;
+      padding: 0;
+      border: none;
+      background: transparent;
+    }
+
+    .code-content pre::before {
+      display: none;
+    }
+
+    .code-content code {
+      font-family: 'Fira Code', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre;
+      display: block;
+      background: transparent !important;
+    }
+
+    /* Inline code */
     .response-content code:not(pre code) {
-      font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-family: 'Fira Code', monospace;
       font-size: 13px;
       background: var(--inline-code-bg);
       padding: 2px 8px;
       border-radius: 6px;
       border: 1px solid var(--border-color);
       color: #e6e6e6;
-      white-space: nowrap;
     }
 
-    /* Syntax Highlighting */
-    .hljs {
-      background: transparent !important;
-      padding: 0 !important;
-      color: #f8f8f2 !important;
-    }
-
-    .hljs-keyword { color: #569cd6; font-weight: 600; }
-    .hljs-string { color: #ce9178; }
-    .hljs-comment { color: #6a9955; font-style: italic; }
-    .hljs-function { color: #dcdcaa; }
-    .hljs-number { color: #b5cea8; }
-    .hljs-operator { color: #d4d4d4; }
-    .hljs-class { color: #4ec9b0; }
-    .hljs-variable { color: #9cdcfe; }
-    .hljs-parameter { color: #9cdcfe; }
-    .hljs-type { color: #4ec9b0; }
-    .hljs-property { color: #9cdcfe; }
-    .hljs-constant { color: #4fc1ff; }
-    .hljs-regexp { color: #d16969; }
-    .hljs-symbol { color: #dcdcaa; }
-    .hljs-bullet { color: #dcdcaa; }
-    .hljs-built_in { color: #4ec9b0; }
-    .hljs-title { color: #dcdcaa; }
-    .hljs-attr { color: #9cdcfe; }
-    .hljs-name { color: #569cd6; }
-    .hljs-tag { color: #569cd6; }
-    .hljs-meta { color: #4ec9b0; }
-
-    /* Lists */
-    .response-content ul, .response-content ol {
-      margin: 16px 0 16px 28px;
-    }
-
-    .response-content li {
-      margin: 6px 0;
-      line-height: 1.7;
-    }
-
-    .response-content li::marker {
-      color: var(--accent-primary);
-    }
-
-    /* Blockquotes */
-    .response-content blockquote {
-      border-left: 4px solid var(--accent-primary);
+    /* Tables */
+    .response-content table {
+      width: 100%;
+      border-collapse: collapse;
       margin: 16px 0;
-      padding: 12px 20px;
-      color: var(--text-secondary);
-      font-style: italic;
-      background: rgba(16, 163, 127, 0.05);
-      border-radius: 0 12px 12px 0;
+      background: var(--bg-tertiary);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
     }
 
-    /* Headers */
-    .response-content h1 {
-      font-size: 24px;
-      margin: 24px 0 16px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid var(--accent-primary);
+    .response-content thead {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
     }
 
-    .response-content h2 {
-      font-size: 20px;
-      margin: 22px 0 14px;
-      color: var(--accent-primary);
+    .response-content th {
+      color: white;
+      font-weight: 600;
+      padding: 14px 16px;
+      text-align: left;
     }
 
-    .response-content h3 {
-      font-size: 18px;
-      margin: 20px 0 12px;
+    .response-content td {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border-color);
     }
 
-    .response-content h4 {
-      font-size: 16px;
-      margin: 18px 0 10px;
-      color: var(--text-secondary);
+    .response-content tbody tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
     }
 
-    /* Paragraphs */
-    .response-content p {
-      margin: 16px 0;
+    .response-content tbody tr:hover {
+      background: rgba(16, 163, 127, 0.08);
     }
 
-    /* Typing Animation */
-    .typing-container {
+    /* Writing Animation */
+    .writing-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 200px;
-      gap: 20px;
+      min-height: 300px;
+      gap: 24px;
+      background: var(--bg-tertiary);
+      border-radius: 16px;
+      padding: 32px;
     }
 
-    .typing-animation {
+    .typing-indicator {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 16px;
-      background: var(--bg-tertiary);
-      border-radius: 40px;
-      border: 1px solid var(--border-color);
+      gap: 12px;
     }
 
     .typing-dot {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
       border-radius: 50%;
       animation: typingWave 1.4s infinite ease-in-out;
@@ -616,30 +532,51 @@
         opacity: 0.6;
       }
       30% { 
-        transform: translateY(-12px);
+        transform: translateY(-16px);
         opacity: 1;
       }
     }
 
-    /* Writing Animation */
-    .writing-animation {
-      display: inline-block;
-      white-space: nowrap;
-      overflow: hidden;
-      border-right: 3px solid var(--accent-primary);
-      animation: blink 0.75s step-end infinite;
+    /* Writing cursor animation */
+    .writing-text {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 15px;
+    }
+
+    .cursor {
+      width: 3px;
+      height: 20px;
+      background: var(--cursor-color);
+      animation: blink 1s infinite;
+      margin-left: 4px;
     }
 
     @keyframes blink {
-      from, to { border-color: transparent; }
-      50% { border-color: var(--accent-primary); }
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
     }
 
-    .loading-text {
-      color: var(--text-secondary);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.5px;
+    /* Progressive write animation */
+    .progressive-text {
+      font-family: 'Fira Code', monospace;
+      color: var(--accent-primary);
+      border-right: 3px solid var(--cursor-color);
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: var(--cursor-color); }
     }
 
     /* Action Buttons */
@@ -682,25 +619,19 @@
       color: white;
     }
 
-    /* Prompt Container at BOTTOM */
+    /* Prompt Container */
     .prompt-container {
       background: var(--bg-secondary);
       border-radius: 20px;
       padding: 28px;
       border: 1px solid var(--border-color);
       box-shadow: var(--card-shadow);
-      transition: transform 0.2s;
-    }
-
-    .prompt-container:hover {
-      transform: translateY(-2px);
     }
 
     .prompt-title {
       font-size: 16px;
       font-weight: 600;
       margin-bottom: 18px;
-      color: var(--text-primary);
     }
 
     .prompt-textarea {
@@ -740,7 +671,6 @@
       transition: all 0.2s;
       width: 100%;
       justify-content: center;
-      letter-spacing: 0.5px;
     }
 
     .send-button:hover {
@@ -752,7 +682,6 @@
       opacity: 0.6;
       cursor: not-allowed;
       transform: none;
-      box-shadow: none;
     }
 
     /* Footer */
@@ -765,90 +694,6 @@
       margin-top: 40px;
     }
 
-    /* Mobile Optimizations */
-    @media (max-width: 768px) {
-      .container {
-        padding: 0 16px;
-      }
-      
-      .header {
-        padding: 20px 0;
-      }
-      
-      .logo {
-        font-size: 22px;
-      }
-      
-      .panel-card, .prompt-container, .response-card {
-        padding: 20px;
-      }
-      
-      .responses-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-      }
-      
-      .layout-toggle {
-        align-self: flex-start;
-      }
-      
-      .responses-container {
-        grid-template-columns: 1fr !important;
-      }
-      
-      .response-content {
-        font-size: 14px;
-      }
-      
-      .response-content table {
-        font-size: 13px;
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-      }
-      
-      .response-content th,
-      .response-content td {
-        padding: 10px 12px;
-      }
-      
-      .response-content pre {
-        padding: 16px;
-        margin: 16px 0;
-      }
-      
-      .response-content pre code {
-        font-size: 13px;
-      }
-      
-      .response-content pre::before {
-        padding: 4px 12px;
-        font-size: 11px;
-      }
-      
-      .model-icon {
-        width: 32px;
-        height: 32px;
-        font-size: 14px;
-      }
-      
-      .prompt-textarea {
-        min-height: 140px;
-        padding: 16px;
-      }
-      
-      .send-button {
-        padding: 14px 24px;
-        font-size: 15px;
-      }
-      
-      .action-button {
-        padding: 6px 12px;
-        font-size: 12px;
-      }
-    }
-
     /* Grid Layout Classes */
     .grid-1 { grid-template-columns: 1fr; }
     .grid-2 { grid-template-columns: repeat(2, 1fr); }
@@ -858,70 +703,75 @@
     @media (min-width: 1200px) {
       .grid-4 { grid-template-columns: repeat(4, 1fr); }
     }
-    
-    @media (min-width: 1024px) and (max-width: 1199px) {
-      .grid-3 { grid-template-columns: repeat(2, 1fr); }
-      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .container { padding: 0 16px; }
+      .response-card { padding: 20px; }
+      .responses-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .responses-container { grid-template-columns: 1fr !important; }
+      
+      .code-block-wrapper {
+        flex-direction: column;
+      }
+      
+      .line-numbers {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 12px 16px;
+        min-width: 100%;
+        text-align: left;
+      }
+      
+      .line-numbers span {
+        display: inline-block;
+        margin-right: 12px;
+      }
+      
+      .code-content {
+        padding: 16px;
+      }
     }
 
     /* Utilities */
-    .hidden {
-      display: none !important;
-    }
+    .hidden { display: none !important; }
 
     .status-message {
       padding: 16px 22px;
       border-radius: 12px;
       margin-bottom: 20px;
       font-size: 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border: 1px solid transparent;
       animation: slideIn 0.3s ease;
     }
 
     @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .status-error {
       background: rgba(239, 68, 68, 0.1);
       color: #ef4444;
-      border-color: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.2);
     }
 
     .status-success {
       background: rgba(16, 163, 127, 0.1);
       color: var(--accent-primary);
-      border-color: rgba(16, 163, 127, 0.2);
-    }
-
-    .status-info {
-      background: rgba(99, 102, 241, 0.1);
-      color: #6366f1;
-      border-color: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(16, 163, 127, 0.2);
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <header class="header">
       <div class="logo">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M2 17L12 22L22 17" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M2 12L12 17L22 12" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#gradient)" stroke-width="2"/>
+          <path d="M2 17L12 22L22 17" stroke="url(#gradient)" stroke-width="2"/>
+          <path d="M2 12L12 17L22 12" stroke="url(#gradient)" stroke-width="2"/>
           <defs>
-            <linearGradient id="gradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+            <linearGradient id="gradient" x1="2" y1="2" x2="22" y2="22">
               <stop offset="0%" stop-color="#10a37f"/>
               <stop offset="100%" stop-color="#6366f1"/>
             </linearGradient>
@@ -929,24 +779,21 @@
         </svg>
         STW<span>AI</span>
       </div>
-      <p class="tagline">Compare multiple AI models side-by-side with professional formatting</p>
+      <p class="tagline">Multi-AI Chat with Professional Code Formatting & Line Numbers</p>
     </header>
 
-    <!-- Main Content -->
     <div class="main-layout">
       <!-- Models Panel -->
       <div class="models-panel">
         <div class="panel-card">
           <h3 class="panel-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#10a37f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10a37f" stroke-width="2">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"/>
             </svg>
             Available Models
           </h3>
           
-          <div class="models-grid" id="modelsContainer">
-            <!-- Models will be populated by JavaScript -->
-          </div>
+          <div class="models-grid" id="modelsContainer"></div>
           
           <div class="counter">
             <span>Selected: <span id="selectedCount">0</span> / 4</span>
@@ -955,54 +802,42 @@
         </div>
         
         <div class="panel-card">
-          <h3 class="panel-title">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M13 16H12C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8H16M13 12H16M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#10a37f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            How to Use
-          </h3>
-          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.8;">
-            1. Select up to 4 AI models from the list<br>
-            2. Enter your prompt in the text area below<br>
-            3. Click "Send Prompt" or press Ctrl/Cmd + Enter<br>
-            4. Watch live typing animations as responses generate
+          <h3 class="panel-title">How to Use</h3>
+          <p style="font-size: 14px; color: var(--text-secondary);">
+            1. Select up to 4 models<br>
+            2. Enter your prompt<br>
+            3. Watch writing animation<br>
+            4. Get formatted code with line numbers
           </p>
         </div>
       </div>
       
       <!-- Chat Area -->
       <div class="chat-area">
-        <!-- Responses Section at TOP -->
+        <!-- Responses Section -->
         <div class="responses-section">
           <div class="responses-header">
             <h3 class="responses-title">AI Responses</h3>
             <div class="layout-toggle">
-              <button class="layout-btn active" id="sideBySideBtn" onclick="setLayout('side-by-side')">
-                Side-by-Side
-              </button>
-              <button class="layout-btn" id="stackedBtn" onclick="setLayout('stacked')">
-                Stacked
-              </button>
+              <button class="layout-btn active" id="sideBySideBtn" onclick="setLayout('side-by-side')">Side-by-Side</button>
+              <button class="layout-btn" id="stackedBtn" onclick="setLayout('stacked')">Stacked</button>
             </div>
           </div>
           
-          <!-- Status Messages -->
           <div id="statusMessage" class="hidden"></div>
           
-          <!-- Responses Container -->
           <div class="responses-container" id="responsesContainer">
-            <!-- Responses will be dynamically inserted here -->
             <div id="output"></div>
           </div>
         </div>
         
-        <!-- Prompt Container at BOTTOM -->
+        <!-- Prompt Container -->
         <div class="prompt-container">
           <h3 class="prompt-title">Your Prompt</h3>
-          <textarea class="prompt-textarea" id="prompt" placeholder="Ask anything to multiple AI models simultaneously...&#10;Example: 'Create a table comparing Python, JavaScript, and Java'"></textarea>
+          <textarea class="prompt-textarea" id="prompt" placeholder="Ask for code, explanations, or comparisons...&#10;Example: 'Write a Python function to calculate fibonacci with memoization'"></textarea>
           <button class="send-button" id="sendButton" onclick="sendPrompt()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"/>
             </svg>
             Send Prompt
           </button>
@@ -1010,16 +845,14 @@
       </div>
     </div>
     
-    <!-- Footer -->
     <footer class="footer">
-      <p>STWAI – Multi-AI Chat Interface | Fast tables & preserved code formatting</p>
+      <p>STWAI – Professional Code Formatting with Line Numbers & Writing Animation</p>
     </footer>
   </div>
 
   <script>
     const API_URL = "https://stwai.vercel.app/api/chat";
     
-    // Available models data
     const models = [
       { id: "nvidia/nemotron-3-nano-30b-a3b:free", name: "Nemotron-3 Nano 30B", free: true },
       { id: "nvidia/nemotron-nano-12b-v2-vl:free", name: "Nemotron Nano 12B V2-VL", free: true },
@@ -1032,12 +865,9 @@
       { id: "google/gemma-3n-e4b-it:free", name: "Gemma-3N E4B-IT", free: true }
     ];
     
-    // Current state
     let selectedModels = [];
     let currentLayout = 'side-by-side';
-    let typingIntervals = {};
     
-    // Initialize the page
     function init() {
       renderModels();
       updateSelectedCount();
@@ -1045,7 +875,6 @@
       updateResponsesGrid();
     }
     
-    // Render available models
     function renderModels() {
       const container = document.getElementById('modelsContainer');
       container.innerHTML = '';
@@ -1058,22 +887,18 @@
           <label for="${model.id}" class="model-name">${model.name}</label>
           ${model.free ? '<span class="model-free">FREE</span>' : ''}
         `;
-        
         container.appendChild(option);
       });
       
-      // Add event listeners to checkboxes
       document.querySelectorAll('.model-option input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', handleModelSelection);
       });
     }
     
-    // Handle model selection
     function handleModelSelection() {
       const checkedBoxes = document.querySelectorAll('.model-option input[type="checkbox"]:checked');
       selectedModels = Array.from(checkedBoxes).map(cb => cb.value);
       
-      // Limit to 4 selections
       if (selectedModels.length > 4) {
         this.checked = false;
         selectedModels = selectedModels.filter(id => id !== this.value);
@@ -1084,82 +909,39 @@
       updateResponsesGrid();
     }
     
-    // Update selected models counter
     function updateSelectedCount() {
-      const countElement = document.getElementById('selectedCount');
-      const statusElement = document.getElementById('selectionStatus');
-      
-      countElement.textContent = selectedModels.length;
-      
-      if (selectedModels.length === 0) {
-        statusElement.textContent = 'Select at least 1 model';
-        statusElement.style.color = 'var(--text-secondary)';
-      } else if (selectedModels.length === 4) {
-        statusElement.textContent = 'Maximum reached';
-        statusElement.style.color = '#ef4444';
-      } else {
-        statusElement.textContent = 'Max 4 models';
-        statusElement.style.color = 'var(--text-secondary)';
-      }
+      document.getElementById('selectedCount').textContent = selectedModels.length;
     }
     
-    // Update responses grid based on selected models count
     function updateResponsesGrid() {
       const container = document.getElementById('responsesContainer');
       const count = Math.max(selectedModels.length, 1);
       
-      // Clear current content
       container.innerHTML = '';
-      
-      // Update grid classes
       container.className = 'responses-container';
+      
       if (currentLayout === 'stacked') {
         container.classList.add('grid-1');
       } else {
-        if (window.innerWidth <= 768) {
-          container.classList.add('grid-1');
-        } else if (count === 1) {
-          container.classList.add('grid-1');
-        } else if (count === 2) {
-          container.classList.add('grid-2');
-        } else if (count === 3) {
-          container.classList.add('grid-3');
-        } else {
-          container.classList.add('grid-4');
-        }
+        if (window.innerWidth <= 768) container.classList.add('grid-1');
+        else if (count === 1) container.classList.add('grid-1');
+        else if (count === 2) container.classList.add('grid-2');
+        else if (count === 3) container.classList.add('grid-3');
+        else container.classList.add('grid-4');
       }
       
-      // Create empty response cards for each selected model
       if (selectedModels.length > 0) {
         selectedModels.forEach(modelId => {
           const modelInfo = models.find(m => m.id === modelId);
           if (modelInfo) {
-            const card = createEmptyResponseCard(modelInfo);
-            container.appendChild(card);
+            container.appendChild(createEmptyResponseCard(modelInfo));
           }
         });
       } else {
-        // Show empty state when no models selected
-        const emptyCard = document.createElement('div');
-        emptyCard.className = 'response-card';
-        emptyCard.innerHTML = `
-          <div class="response-header">
-            <div class="model-badge">
-              <div class="model-icon">🤖</div>
-              <span>No Model Selected</span>
-            </div>
-          </div>
-          <div class="response-content">
-            <div style="padding: 40px; text-align: center; color: var(--text-secondary);">
-              Select AI models from the left panel to see their responses here
-            </div>
-          </div>
-        `;
-        container.appendChild(emptyCard);
+        container.appendChild(createEmptyStateCard());
       }
     }
     
-    // Create empty response card with typing animation
     function createEmptyResponseCard(modelInfo) {
       const card = document.createElement('div');
       card.className = 'response-card';
@@ -1172,161 +954,135 @@
           </div>
           <div class="action-buttons">
             ${modelInfo.free ? '<span class="model-free">FREE</span>' : ''}
-            <button class="action-button copy-button" onclick="copyResponse('${modelInfo.id}')" title="Copy response">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 16H6C4.89543 16 4 15.1046 4 14V6C4 4.89543 4.89543 4 6 4H14C15.1046 4 16 4.89543 16 6V8M10 20H18C19.1046 20 20 19.1046 20 18V10C20 8.89543 19.1046 8 18 8H10C8.89543 8 8 8.89543 8 10V18C8 19.1046 8.89543 20 10 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <button class="action-button copy-button" onclick="copyResponse('${modelInfo.id}')">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M8 16H6C4.89543 16 4 15.1046 4 14V6C4 4.89543 4.89543 4 6 4H14C15.1046 4 16 4.89543 16 6V8M10 20H18C19.1046 20 20 19.1046 20 18V10C20 8.89543 19.1046 8 18 8H10C8.89543 8 8 8.89543 8 10V18C8 19.1046 8.89543 20 10 20Z"/>
               </svg>
               Copy
             </button>
           </div>
         </div>
         <div class="response-content" id="content-${modelInfo.id}">
-          <div class="typing-container">
-            <div class="typing-animation">
+          <div class="writing-container">
+            <div class="typing-indicator">
               <div class="typing-dot"></div>
               <div class="typing-dot"></div>
               <div class="typing-dot"></div>
             </div>
-            <p class="loading-text">Waiting for response from ${modelInfo.name}...</p>
+            <div class="writing-text">
+              <span>AI is writing</span>
+              <span class="cursor"></span>
+            </div>
           </div>
         </div>
       `;
       return card;
     }
     
-    // Set response layout
+    function createEmptyStateCard() {
+      const card = document.createElement('div');
+      card.className = 'response-card';
+      card.innerHTML = `
+        <div class="response-header">
+          <div class="model-badge">
+            <div class="model-icon">🤖</div>
+            <span>No Model Selected</span>
+          </div>
+        </div>
+        <div class="response-content">
+          <div style="padding: 40px; text-align: center; color: var(--text-secondary);">
+            Select AI models from the left panel to see their responses here
+          </div>
+        </div>
+      `;
+      return card;
+    }
+    
     function setLayout(layout) {
       currentLayout = layout;
-      const sideBySideBtn = document.getElementById('sideBySideBtn');
-      const stackedBtn = document.getElementById('stackedBtn');
-      
-      // Update button states
-      if (layout === 'side-by-side') {
-        sideBySideBtn.classList.add('active');
-        stackedBtn.classList.remove('active');
-      } else {
-        stackedBtn.classList.add('active');
-        sideBySideBtn.classList.remove('active');
-      }
-      
+      document.getElementById('sideBySideBtn').classList.toggle('active', layout === 'side-by-side');
+      document.getElementById('stackedBtn').classList.toggle('active', layout === 'stacked');
       updateResponsesGrid();
     }
     
-    // Show status message
-    function showStatus(message, type = 'info') {
+    function showStatus(message, type) {
       const statusElement = document.getElementById('statusMessage');
       statusElement.textContent = message;
       statusElement.className = `status-message status-${type}`;
       statusElement.classList.remove('hidden');
       
-      // Auto-hide info messages after 5 seconds
-      if (type === 'info' || type === 'success') {
-        setTimeout(() => {
-          statusElement.classList.add('hidden');
-        }, 5000);
+      if (type === 'success') {
+        setTimeout(() => statusElement.classList.add('hidden'), 5000);
       }
     }
     
-    // Fast table formatter - optimized for speed
-    function formatTable(match, headers, rows) {
-      const headerCells = headers.split('|').filter(cell => cell.trim()).map(cell => cell.trim());
+    // Format code with line numbers
+    function formatCodeWithLineNumbers(code, language) {
+      const lines = code.split('\n');
+      const lineNumbers = lines.map((_, i) => `<span></span>`).join('');
       
-      let tableHtml = '<table><thead><tr>';
-      headerCells.forEach(header => {
-        tableHtml += `<th>${escapeHtml(header)}</th>`;
-      });
-      tableHtml += '</tr></thead><tbody>';
-      
-      const rowLines = rows.trim().split('\n').filter(line => line.trim());
-      rowLines.forEach(line => {
-        const cells = line.split('|').filter(cell => cell.trim()).map(cell => cell.trim());
-        if (cells.length === headerCells.length) {
-          tableHtml += '<tr>';
-          cells.forEach(cell => {
-            tableHtml += `<td>${escapeHtml(cell)}</td>`;
-          });
-          tableHtml += '</tr>';
-        }
-      });
-      
-      tableHtml += '</tbody></table>';
-      return tableHtml;
+      return `
+        <div class="code-block-wrapper">
+          <div class="line-numbers">
+            ${lineNumbers}
+          </div>
+          <div class="code-content">
+            <pre data-language="${language}"><code class="language-${language}">${escapeHtml(code)}</code></pre>
+          </div>
+        </div>
+      `;
     }
     
-    // Fast code formatter - preserves all whitespace
-    function formatCodeBlock(lang, code) {
-      const language = lang || detectLanguage(code);
-      const escapedCode = escapeHtml(code);
-      return `<pre data-language="${language}"><code class="language-${language}">${escapedCode}</code></pre>`;
-    }
-    
-    // Professional formatter with fast table rendering
+    // Enhanced formatter with line numbers for code blocks
     function formatResponse(text) {
       if (!text) return '<p>No response received</p>';
       
       let formatted = text;
       
-      // Fast table detection - process tables first (highest priority)
-      formatted = formatted.replace(/\|([^\n]+)\|\n\|([-:| ]+)+\|\n((?:\|[^\n]+\|\n?)+)/g, formatTable);
-      
-      // Simple tables (no separator line)
-      formatted = formatted.replace(/(?:\|.+\|\n){2,}/g, (match) => {
-        const lines = match.trim().split('\n').filter(l => l.trim());
-        if (lines.length >= 2) {
-          const headers = lines[0].split('|').filter(c => c.trim()).map(c => c.trim());
-          let tableHtml = '<table><thead><tr>';
-          headers.forEach(header => tableHtml += `<th>${escapeHtml(header)}</th>`);
-          tableHtml += '</tr></thead><tbody>';
-          
-          for (let i = 1; i < lines.length; i++) {
-            const cells = lines[i].split('|').filter(c => c.trim()).map(c => c.trim());
-            if (cells.length === headers.length) {
-              tableHtml += '<tr>';
-              cells.forEach(cell => tableHtml += `<td>${escapeHtml(cell)}</td>`);
-              tableHtml += '</tr>';
-            }
-          }
-          tableHtml += '</tbody></table>';
-          return tableHtml;
-        }
-        return match;
-      });
-      
-      // Code blocks with language
+      // Handle code blocks with line numbers
       formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-        return formatCodeBlock(lang, code);
+        const language = lang || detectLanguage(code);
+        return formatCodeWithLineNumbers(code.trim(), language);
       });
       
-      // Headers
-      formatted = formatted.replace(/^#### (.*$)/gm, '<h4>$1</h4>');
+      // Handle inline code
+      formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+      
+      // Handle tables
+      formatted = formatted.replace(/\|([^\n]+)\|\n\|([-:| ]+)+\|\n((?:\|[^\n]+\|\n?)+)/g, (match, headers, _, rows) => {
+        const headerCells = headers.split('|').filter(c => c.trim()).map(c => c.trim());
+        const rowLines = rows.trim().split('\n').filter(r => r.trim());
+        
+        let tableHtml = '<table><thead><tr>';
+        headerCells.forEach(h => tableHtml += `<th>${h}</th>`);
+        tableHtml += '</tr></thead><tbody>';
+        
+        rowLines.forEach(line => {
+          const cells = line.split('|').filter(c => c.trim()).map(c => c.trim());
+          if (cells.length === headerCells.length) {
+            tableHtml += '<tr>';
+            cells.forEach(c => tableHtml += `<td>${c}</td>`);
+            tableHtml += '</tr>';
+          }
+        });
+        
+        tableHtml += '</tbody></table>';
+        return tableHtml;
+      });
+      
+      // Handle headers
       formatted = formatted.replace(/^### (.*$)/gm, '<h3>$1</h3>');
       formatted = formatted.replace(/^## (.*$)/gm, '<h2>$1</h2>');
       formatted = formatted.replace(/^# (.*$)/gm, '<h1>$1</h1>');
       
-      // Inline code
-      formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
-      
-      // Bold and italic
-      formatted = formatted.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
-      formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-      formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
-      
-      // Lists
+      // Handle lists
       formatted = formatted.replace(/^\s*[-*+]\s+(.+)/gm, '<li>$1</li>');
       formatted = formatted.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
       
       formatted = formatted.replace(/^\s*\d+\.\s+(.+)/gm, '<li>$1</li>');
       formatted = formatted.replace(/(<li>.*<\/li>\n?)+/g, '<ol>$&</ol>');
       
-      // Blockquotes
-      formatted = formatted.replace(/^>\s*(.+)/gm, '<blockquote>$1</blockquote>');
-      
-      // Horizontal rules
-      formatted = formatted.replace(/^---$/gm, '<hr>');
-      formatted = formatted.replace(/^___$/gm, '<hr>');
-      formatted = formatted.replace(/^\*\*\*$/gm, '<hr>');
-      
-      // Paragraphs (simple handling)
+      // Handle paragraphs
       const parts = formatted.split(/\n\n+/);
       if (parts.length > 1 && !formatted.startsWith('<')) {
         formatted = parts.map(p => {
@@ -1337,53 +1093,26 @@
         formatted = `<p>${formatted}</p>`;
       }
       
-      // Convert remaining newlines to <br> but preserve code blocks
-      formatted = formatted.replace(/<pre[\s\S]*?<\/pre>|<code[\s\S]*?<\/code>|(<br>)/g, (match) => {
-        return match;
-      });
-      
-      formatted = formatted.replace(/\n/g, '<br>');
-      
       return formatted;
     }
     
-    // Detect programming language
     function detectLanguage(code) {
       const codeStr = code.toLowerCase();
-      const patterns = {
-        javascript: ['function', '=>', 'const ', 'let ', 'var ', 'console.log', 'document.', 'window.'],
-        python: ['def ', 'import ', 'from ', 'class ', 'self', 'if __name__', 'print('],
-        java: ['public class', 'private void', 'System.out', 'public static', 'String[]'],
-        c: ['#include', 'int main', 'printf', 'scanf', 'stdlib.h'],
-        cpp: ['#include', 'cout <<', 'cin >>', 'namespace std', 'vector<'],
-        html: ['<!DOCTYPE', '<html', '<body', '<div', '<script'],
-        css: ['{', '}', 'margin:', 'padding:', 'color:', 'font-size'],
-        sql: ['SELECT', 'FROM', 'WHERE', 'INSERT INTO', 'UPDATE', 'DELETE'],
-        php: ['<?php', 'echo ', '$', 'function', 'return'],
-        typescript: ['interface', 'type ', ':', 'React.FC', '<T>'],
-        go: ['func ', 'package ', 'import (', 'fmt.', 'go '],
-        rust: ['fn ', 'let mut', 'println!', 'cargo', 'impl'],
-        bash: ['#!/bin', 'echo ', 'grep ', 'sudo ', 'apt-get'],
-        json: ['{', '}', '":', '",', '[']
-      };
-      
-      for (const [lang, keywords] of Object.entries(patterns)) {
-        if (keywords.some(keyword => codeStr.includes(keyword))) {
-          return lang;
-        }
-      }
-      
+      if (codeStr.includes('function') || codeStr.includes('=>') || codeStr.includes('const ')) return 'javascript';
+      if (codeStr.includes('def ') || codeStr.includes('import ') || codeStr.includes('print(')) return 'python';
+      if (codeStr.includes('public class') || codeStr.includes('System.out')) return 'java';
+      if (codeStr.includes('#include') || codeStr.includes('int main')) return 'c';
+      if (codeStr.includes('<!DOCTYPE') || codeStr.includes('<html')) return 'html';
+      if (codeStr.includes('{') && codeStr.includes('}') && codeStr.includes(':')) return 'css';
       return 'plaintext';
     }
     
-    // Escape HTML
     function escapeHtml(text) {
       const div = document.createElement('div');
       div.textContent = text;
       return div.innerHTML;
     }
     
-    // Copy response to clipboard
     function copyResponse(modelId) {
       const contentDiv = document.getElementById(`content-${modelId}`);
       if (!contentDiv) return;
@@ -1392,13 +1121,11 @@
       
       navigator.clipboard.writeText(text).then(() => {
         showStatus('Response copied to clipboard!', 'success');
-      }).catch(err => {
-        console.error('Failed to copy: ', err);
+      }).catch(() => {
         showStatus('Failed to copy response', 'error');
       });
     }
     
-    // Send prompt to API
     async function sendPrompt() {
       const prompt = document.getElementById('prompt').value.trim();
       const sendButton = document.getElementById('sendButton');
@@ -1415,24 +1142,26 @@
       
       sendButton.disabled = true;
       sendButton.innerHTML = `
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation: spin 1s linear infinite;">
-          <path d="M12 2V6M12 18V22M6 12H2M22 12H18M19.07 4.93L16.24 7.76M7.76 16.24L4.93 19.07M19.07 19.07L16.24 16.24M7.76 7.76L4.93 4.93" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" style="animation: spin 1s linear infinite;">
+          <path d="M12 2V6M12 18V22M6 12H2M22 12H18M19.07 4.93L16.24 7.76M7.76 16.24L4.93 19.07M19.07 19.07L16.24 16.24M7.76 7.76L4.93 4.93"/>
         </svg>
         Processing...
       `;
       
-      // Show typing animations
       selectedModels.forEach(modelId => {
         const contentDiv = document.getElementById(`content-${modelId}`);
         if (contentDiv) {
           contentDiv.innerHTML = `
-            <div class="typing-container">
-              <div class="typing-animation">
+            <div class="writing-container">
+              <div class="typing-indicator">
                 <div class="typing-dot"></div>
                 <div class="typing-dot"></div>
                 <div class="typing-dot"></div>
               </div>
-              <p class="loading-text">Generating response...</p>
+              <div class="writing-text">
+                <span>Writing response</span>
+                <span class="cursor"></span>
+              </div>
             </div>
           `;
         }
@@ -1466,37 +1195,26 @@
           }, 50);
           
           showStatus(`Received responses from ${Object.keys(data.responses).length} model(s)`, 'success');
-        } else {
-          showStatus('No responses received from the API', 'error');
         }
       } catch (error) {
-        console.error('Error:', error);
-        
         selectedModels.forEach(modelId => {
           const contentDiv = document.getElementById(`content-${modelId}`);
           if (contentDiv) {
-            contentDiv.innerHTML = `
-              <div style="color: #ef4444; padding: 20px; text-align: center;">
-                <strong>Error:</strong> ${error.message}<br>
-                <p style="margin-top: 10px;">Please check your connection or try again later.</p>
-              </div>
-            `;
+            contentDiv.innerHTML = `<p style="color: #ef4444;">Error: ${error.message}</p>`;
           }
         });
-        
         showStatus(`Error: ${error.message}`, 'error');
       } finally {
         sendButton.disabled = false;
         sendButton.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13"/>
           </svg>
           Send Prompt
         `;
       }
     }
     
-    // Setup event listeners
     function setupEventListeners() {
       document.getElementById('prompt').addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
@@ -1504,16 +1222,9 @@
         }
       });
       
-      document.getElementById('prompt').addEventListener('focus', () => {
-        document.getElementById('statusMessage').classList.add('hidden');
-      });
-      
-      window.addEventListener('resize', () => {
-        updateResponsesGrid();
-      });
+      window.addEventListener('resize', updateResponsesGrid);
     }
     
-    // Initialize on page load
     document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
