@@ -7,6 +7,7 @@
   
   <!-- Font for better typography -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap">
 
   <!-- Highlight.js for code syntax highlighting -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
@@ -51,12 +52,8 @@
       --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
       --code-bg: #1a1a1a;
       --inline-code-bg: #2a2a2a;
-      --code-comment: #6a9955;
-      --code-keyword: #569cd6;
-      --code-string: #ce9178;
-      --code-function: #dcdcaa;
-      --code-number: #b5cea8;
-      --code-operator: #d4d4d4;
+      --table-header-bg: #2a2a2a;
+      --table-row-hover: rgba(16, 163, 127, 0.1);
     }
 
     * {
@@ -101,7 +98,7 @@
 
     .logo span {
       color: var(--accent-primary);
-      background: linear-gradient(135deg, #10a37f, #0d8c6d);
+      background: linear-gradient(135deg, #10a37f, #6366f1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -379,16 +376,93 @@
       padding-right: 4px;
     }
 
-    /* Professional Code Formatting */
+    /* Fast Table Formatting */
+    .response-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      background: var(--bg-tertiary);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      font-size: 14px;
+      display: table;
+      table-layout: fixed;
+    }
+
+    .response-content thead {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      display: table-header-group;
+    }
+
+    .response-content th {
+      color: white;
+      font-weight: 600;
+      text-align: left;
+      padding: 14px 16px;
+      font-size: 14px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+      white-space: nowrap;
+    }
+
+    .response-content th:last-child {
+      border-right: none;
+    }
+
+    .response-content tbody {
+      display: table-row-group;
+    }
+
+    .response-content tr {
+      display: table-row;
+      transition: background-color 0.2s;
+    }
+
+    .response-content td {
+      padding: 12px 16px;
+      border-top: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      color: var(--text-primary);
+      line-height: 1.6;
+      display: table-cell;
+      word-break: break-word;
+    }
+
+    .response-content td:last-child {
+      border-right: none;
+    }
+
+    .response-content tbody tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .response-content tbody tr:hover {
+      background: var(--table-row-hover);
+    }
+
+    /* Professional Code Formatting - Preserve Structure */
     .response-content pre {
       background: var(--code-bg);
       border-radius: 12px;
       padding: 20px;
-      margin: 24px 0;
+      margin: 16px 0;
       overflow-x: auto;
       border: 1px solid var(--border-color);
       position: relative;
       box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.5);
+      white-space: pre;
+      word-wrap: normal;
+      tab-size: 4;
+    }
+
+    .response-content pre code {
+      font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre;
+      display: block;
+      min-width: 100%;
+      float: left;
     }
 
     .response-content pre::before {
@@ -405,30 +479,28 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      z-index: 10;
     }
 
-    .response-content code {
+    /* Inline Code */
+    .response-content code:not(pre code) {
       font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
-      font-size: 14px;
+      font-size: 13px;
       background: var(--inline-code-bg);
-      padding: 3px 10px;
-      border-radius: 8px;
+      padding: 2px 8px;
+      border-radius: 6px;
       border: 1px solid var(--border-color);
       color: #e6e6e6;
+      white-space: nowrap;
     }
 
-    .response-content pre code {
-      background: none;
-      border: none;
-      padding: 0;
-      font-size: 14px;
-      color: #f8f8f2;
-      display: block;
-      line-height: 1.6;
-      font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+    /* Syntax Highlighting */
+    .hljs {
+      background: transparent !important;
+      padding: 0 !important;
+      color: #f8f8f2 !important;
     }
 
-    /* Enhanced Syntax Highlighting */
     .hljs-keyword { color: #569cd6; font-weight: 600; }
     .hljs-string { color: #ce9178; }
     .hljs-comment { color: #6a9955; font-style: italic; }
@@ -451,55 +523,13 @@
     .hljs-tag { color: #569cd6; }
     .hljs-meta { color: #4ec9b0; }
 
-    /* Tables */
-    .response-content table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      margin: 24px 0;
-      background: var(--bg-tertiary);
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid var(--border-color);
-      font-size: 14px;
-    }
-
-    .response-content thead {
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-    }
-
-    .response-content th {
-      color: white;
-      font-weight: 600;
-      text-align: left;
-      padding: 16px 20px;
-      font-size: 14px;
-    }
-
-    .response-content td {
-      padding: 14px 20px;
-      border-top: 1px solid var(--border-color);
-      color: var(--text-primary);
-      line-height: 1.6;
-    }
-
-    .response-content tbody tr:nth-child(even) {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .response-content tbody tr:hover {
-      background: rgba(16, 163, 127, 0.08);
-    }
-
     /* Lists */
     .response-content ul, .response-content ol {
-      margin: 20px 0 20px 32px;
-      padding-left: 8px;
+      margin: 16px 0 16px 28px;
     }
 
     .response-content li {
-      margin: 8px 0;
-      color: var(--text-primary);
+      margin: 6px 0;
       line-height: 1.7;
     }
 
@@ -510,97 +540,146 @@
     /* Blockquotes */
     .response-content blockquote {
       border-left: 4px solid var(--accent-primary);
-      margin: 24px 0;
-      padding: 20px 28px;
+      margin: 16px 0;
+      padding: 12px 20px;
       color: var(--text-secondary);
       font-style: italic;
-      background: rgba(16, 163, 127, 0.08);
-      border-radius: 0 16px 16px 0;
-      font-size: 15px;
-      line-height: 1.8;
+      background: rgba(16, 163, 127, 0.05);
+      border-radius: 0 12px 12px 0;
     }
 
     /* Headers */
     .response-content h1 {
-      font-size: 26px;
-      margin: 28px 0 22px;
-      padding-bottom: 10px;
+      font-size: 24px;
+      margin: 24px 0 16px;
+      padding-bottom: 8px;
       border-bottom: 2px solid var(--accent-primary);
-      font-weight: 700;
-      background: linear-gradient(135deg, #fff, #e0e0e0);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
 
     .response-content h2 {
-      font-size: 22px;
-      margin: 26px 0 20px;
+      font-size: 20px;
+      margin: 22px 0 14px;
       color: var(--accent-primary);
-      font-weight: 600;
     }
 
     .response-content h3 {
       font-size: 18px;
-      margin: 22px 0 16px;
-      font-weight: 600;
-      color: var(--text-primary);
+      margin: 20px 0 12px;
     }
 
     .response-content h4 {
       font-size: 16px;
-      margin: 20px 0 14px;
-      font-weight: 600;
+      margin: 18px 0 10px;
       color: var(--text-secondary);
     }
 
     /* Paragraphs */
     .response-content p {
-      margin: 18px 0;
-      color: var(--text-primary);
-      line-height: 1.9;
+      margin: 16px 0;
     }
 
-    .response-content p:first-of-type {
-      margin-top: 0;
+    /* Typing Animation */
+    .typing-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 200px;
+      gap: 20px;
     }
 
-    .response-content p:last-of-type {
-      margin-bottom: 0;
+    .typing-animation {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      background: var(--bg-tertiary);
+      border-radius: 40px;
+      border: 1px solid var(--border-color);
     }
 
-    /* Special boxes */
-    .response-content .note {
+    .typing-dot {
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: 50%;
+      animation: typingWave 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    .typing-dot:nth-child(3) { animation-delay: 0s; }
+
+    @keyframes typingWave {
+      0%, 60%, 100% { 
+        transform: translateY(0);
+        opacity: 0.6;
+      }
+      30% { 
+        transform: translateY(-12px);
+        opacity: 1;
+      }
+    }
+
+    /* Writing Animation */
+    .writing-animation {
+      display: inline-block;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 3px solid var(--accent-primary);
+      animation: blink 0.75s step-end infinite;
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent; }
+      50% { border-color: var(--accent-primary); }
+    }
+
+    .loading-text {
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .action-button {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      border-radius: 10px;
+      padding: 8px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .action-button:hover {
+      background: var(--accent-primary);
+      color: white;
+      border-color: var(--accent-primary);
+      transform: translateY(-1px);
+    }
+
+    .copy-button {
       background: rgba(16, 163, 127, 0.1);
-      border-left: 4px solid var(--accent-primary);
-      padding: 18px 24px;
-      margin: 24px 0;
-      border-radius: 0 12px 12px 0;
-      font-size: 15px;
-      position: relative;
+      border: 1px solid rgba(16, 163, 127, 0.3);
+      color: var(--accent-primary);
     }
 
-    .response-content .warning {
-      background: rgba(255, 193, 7, 0.1);
-      border-left: 4px solid #ffc107;
-      padding: 18px 24px;
-      margin: 24px 0;
-      border-radius: 0 12px 12px 0;
-    }
-
-    .response-content .error-box {
-      background: rgba(239, 68, 68, 0.1);
-      border-left: 4px solid #ef4444;
-      padding: 18px 24px;
-      margin: 24px 0;
-      border-radius: 0 12px 12px 0;
-    }
-
-    /* Horizontal Rule */
-    .response-content hr {
-      border: none;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--border-color), transparent);
-      margin: 32px 0;
+    .copy-button:hover {
+      background: var(--accent-primary);
+      color: white;
     }
 
     /* Prompt Container at BOTTOM */
@@ -676,86 +755,6 @@
       box-shadow: none;
     }
 
-    /* Loading States */
-    .loading {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      min-height: 250px;
-      gap: 20px;
-    }
-
-    .typing-animation {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .typing-dot {
-      width: 12px;
-      height: 12px;
-      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-      border-radius: 50%;
-      animation: typing 1.4s infinite ease-in-out;
-    }
-
-    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-    .typing-dot:nth-child(3) { animation-delay: 0s; }
-
-    @keyframes typing {
-      0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
-      30% { transform: translateY(-12px); opacity: 1; }
-    }
-
-    .loading-text {
-      color: var(--text-secondary);
-      font-size: 14px;
-      font-weight: 500;
-      letter-spacing: 0.5px;
-    }
-
-    /* Action Buttons */
-    .action-buttons {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .action-button {
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border-color);
-      color: var(--text-secondary);
-      border-radius: 10px;
-      padding: 8px 16px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 500;
-    }
-
-    .action-button:hover {
-      background: var(--accent-primary);
-      color: white;
-      border-color: var(--accent-primary);
-      transform: translateY(-1px);
-    }
-
-    .copy-button {
-      background: rgba(16, 163, 127, 0.1);
-      border: 1px solid rgba(16, 163, 127, 0.3);
-      color: var(--accent-primary);
-    }
-
-    .copy-button:hover {
-      background: var(--accent-primary);
-      color: white;
-    }
-
     /* Footer */
     .footer {
       padding: 24px 0;
@@ -802,21 +801,25 @@
         font-size: 14px;
       }
       
-      .response-content h1 {
-        font-size: 22px;
+      .response-content table {
+        font-size: 13px;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
       }
       
-      .response-content h2 {
-        font-size: 20px;
-      }
-      
-      .response-content h3 {
-        font-size: 17px;
+      .response-content th,
+      .response-content td {
+        padding: 10px 12px;
       }
       
       .response-content pre {
         padding: 16px;
-        margin: 20px 0;
+        margin: 16px 0;
+      }
+      
+      .response-content pre code {
+        font-size: 13px;
       }
       
       .response-content pre::before {
@@ -926,7 +929,7 @@
         </svg>
         STW<span>AI</span>
       </div>
-      <p class="tagline">Compare multiple AI models side-by-side with professional code formatting</p>
+      <p class="tagline">Compare multiple AI models side-by-side with professional formatting</p>
     </header>
 
     <!-- Main Content -->
@@ -962,7 +965,7 @@
             1. Select up to 4 AI models from the list<br>
             2. Enter your prompt in the text area below<br>
             3. Click "Send Prompt" or press Ctrl/Cmd + Enter<br>
-            4. Compare responses with professional formatting
+            4. Watch live typing animations as responses generate
           </p>
         </div>
       </div>
@@ -996,7 +999,7 @@
         <!-- Prompt Container at BOTTOM -->
         <div class="prompt-container">
           <h3 class="prompt-title">Your Prompt</h3>
-          <textarea class="prompt-textarea" id="prompt" placeholder="Ask anything to multiple AI models simultaneously...&#10;Example: 'Write a function to calculate fibonacci in Python'"></textarea>
+          <textarea class="prompt-textarea" id="prompt" placeholder="Ask anything to multiple AI models simultaneously...&#10;Example: 'Create a table comparing Python, JavaScript, and Java'"></textarea>
           <button class="send-button" id="sendButton" onclick="sendPrompt()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1009,7 +1012,7 @@
     
     <!-- Footer -->
     <footer class="footer">
-      <p>STWAI – Multi-AI Chat Interface | Professional code formatting for all AI responses</p>
+      <p>STWAI – Multi-AI Chat Interface | Fast tables & preserved code formatting</p>
     </footer>
   </div>
 
@@ -1032,6 +1035,7 @@
     // Current state
     let selectedModels = [];
     let currentLayout = 'side-by-side';
+    let typingIntervals = {};
     
     // Initialize the page
     function init() {
@@ -1146,8 +1150,8 @@
             </div>
           </div>
           <div class="response-content">
-            <div class="note">
-              <strong>Select AI models</strong> from the left panel to see their responses here.
+            <div style="padding: 40px; text-align: center; color: var(--text-secondary);">
+              Select AI models from the left panel to see their responses here
             </div>
           </div>
         `;
@@ -1155,7 +1159,7 @@
       }
     }
     
-    // Create empty response card
+    // Create empty response card with typing animation
     function createEmptyResponseCard(modelInfo) {
       const card = document.createElement('div');
       card.className = 'response-card';
@@ -1177,7 +1181,7 @@
           </div>
         </div>
         <div class="response-content" id="content-${modelInfo.id}">
-          <div class="loading">
+          <div class="typing-container">
             <div class="typing-animation">
               <div class="typing-dot"></div>
               <div class="typing-dot"></div>
@@ -1223,143 +1227,150 @@
       }
     }
     
-    // Professional code formatter with proper language detection
+    // Fast table formatter - optimized for speed
+    function formatTable(match, headers, rows) {
+      const headerCells = headers.split('|').filter(cell => cell.trim()).map(cell => cell.trim());
+      
+      let tableHtml = '<table><thead><tr>';
+      headerCells.forEach(header => {
+        tableHtml += `<th>${escapeHtml(header)}</th>`;
+      });
+      tableHtml += '</tr></thead><tbody>';
+      
+      const rowLines = rows.trim().split('\n').filter(line => line.trim());
+      rowLines.forEach(line => {
+        const cells = line.split('|').filter(cell => cell.trim()).map(cell => cell.trim());
+        if (cells.length === headerCells.length) {
+          tableHtml += '<tr>';
+          cells.forEach(cell => {
+            tableHtml += `<td>${escapeHtml(cell)}</td>`;
+          });
+          tableHtml += '</tr>';
+        }
+      });
+      
+      tableHtml += '</tbody></table>';
+      return tableHtml;
+    }
+    
+    // Fast code formatter - preserves all whitespace
+    function formatCodeBlock(lang, code) {
+      const language = lang || detectLanguage(code);
+      const escapedCode = escapeHtml(code);
+      return `<pre data-language="${language}"><code class="language-${language}">${escapedCode}</code></pre>`;
+    }
+    
+    // Professional formatter with fast table rendering
     function formatResponse(text) {
       if (!text) return '<p>No response received</p>';
       
       let formatted = text;
       
-      // Preserve line breaks and paragraphs
-      formatted = formatted.replace(/\n\n+/g, '</p><p>');
+      // Fast table detection - process tables first (highest priority)
+      formatted = formatted.replace(/\|([^\n]+)\|\n\|([-:| ]+)+\|\n((?:\|[^\n]+\|\n?)+)/g, formatTable);
       
-      // Format headers with proper hierarchy
+      // Simple tables (no separator line)
+      formatted = formatted.replace(/(?:\|.+\|\n){2,}/g, (match) => {
+        const lines = match.trim().split('\n').filter(l => l.trim());
+        if (lines.length >= 2) {
+          const headers = lines[0].split('|').filter(c => c.trim()).map(c => c.trim());
+          let tableHtml = '<table><thead><tr>';
+          headers.forEach(header => tableHtml += `<th>${escapeHtml(header)}</th>`);
+          tableHtml += '</tr></thead><tbody>';
+          
+          for (let i = 1; i < lines.length; i++) {
+            const cells = lines[i].split('|').filter(c => c.trim()).map(c => c.trim());
+            if (cells.length === headers.length) {
+              tableHtml += '<tr>';
+              cells.forEach(cell => tableHtml += `<td>${escapeHtml(cell)}</td>`);
+              tableHtml += '</tr>';
+            }
+          }
+          tableHtml += '</tbody></table>';
+          return tableHtml;
+        }
+        return match;
+      });
+      
+      // Code blocks with language
+      formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+        return formatCodeBlock(lang, code);
+      });
+      
+      // Headers
       formatted = formatted.replace(/^#### (.*$)/gm, '<h4>$1</h4>');
       formatted = formatted.replace(/^### (.*$)/gm, '<h3>$1</h3>');
       formatted = formatted.replace(/^## (.*$)/gm, '<h2>$1</h2>');
       formatted = formatted.replace(/^# (.*$)/gm, '<h1>$1</h1>');
       
-      // Professional code block formatting with language detection
-      formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-        const language = lang || detectLanguage(code);
-        const escapedCode = escapeHtml(code.trim());
-        return `<pre data-language="${language}"><code class="language-${language}">${escapedCode}</code></pre>`;
-      });
-      
-      // Format inline code
+      // Inline code
       formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
       
-      // Format bold and italic
+      // Bold and italic
       formatted = formatted.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
       formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
       formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
       
-      // Format tables (markdown style)
-      formatted = formatted.replace(/\|([^\n]+)\|\n\|([-:| ]+)+\|\n((?:\|[^\n]+\|\n?)+)/g, (match, headerRow, separatorRow, dataRows) => {
-        const headers = headerRow.split('|').filter(h => h.trim()).map(h => h.trim());
-        const rows = dataRows.trim().split('\n').filter(r => r.trim());
-        
-        let tableHtml = '<table><thead><tr>';
-        headers.forEach(header => {
-          tableHtml += `<th>${header}</th>`;
-        });
-        tableHtml += '</tr></thead><tbody>';
-        
-        rows.forEach(row => {
-          const cells = row.split('|').filter(c => c.trim()).map(c => c.trim());
-          if (cells.length === headers.length) {
-            tableHtml += '<tr>';
-            cells.forEach(cell => {
-              tableHtml += `<td>${cell}</td>`;
-            });
-            tableHtml += '</tr>';
-          }
-        });
-        
-        tableHtml += '</tbody></table>';
-        return tableHtml;
-      });
-      
-      // Format unordered lists
+      // Lists
       formatted = formatted.replace(/^\s*[-*+]\s+(.+)/gm, '<li>$1</li>');
-      formatted = formatted.replace(/(<li>.*<\/li>\n?)+/g, (match) => {
-        return '<ul>' + match + '</ul>';
-      });
+      formatted = formatted.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
       
-      // Format ordered lists
       formatted = formatted.replace(/^\s*\d+\.\s+(.+)/gm, '<li>$1</li>');
-      formatted = formatted.replace(/(<li>.*<\/li>\n?)+/g, (match) => {
-        return '<ol>' + match + '</ol>';
-      });
+      formatted = formatted.replace(/(<li>.*<\/li>\n?)+/g, '<ol>$&</ol>');
       
-      // Format blockquotes
+      // Blockquotes
       formatted = formatted.replace(/^>\s*(.+)/gm, '<blockquote>$1</blockquote>');
       
-      // Format special boxes
-      formatted = formatted.replace(/^📝\s*(.+)/gm, '<div class="note">$1</div>');
-      formatted = formatted.replace(/^⚠️\s*(.+)/gm, '<div class="warning">$1</div>');
-      formatted = formatted.replace(/^❌\s*(.+)/gm, '<div class="error-box">$1</div>');
-      
-      // Format horizontal rules
+      // Horizontal rules
       formatted = formatted.replace(/^---$/gm, '<hr>');
       formatted = formatted.replace(/^___$/gm, '<hr>');
       formatted = formatted.replace(/^\*\*\*$/gm, '<hr>');
       
-      // Convert remaining newlines to <br>
-      formatted = formatted.replace(/\n/g, '<br>');
-      
-      // Wrap in paragraph if not already wrapped
-      if (!formatted.startsWith('<') || formatted.startsWith('<br')) {
-        formatted = '<p>' + formatted + '</p>';
+      // Paragraphs (simple handling)
+      const parts = formatted.split(/\n\n+/);
+      if (parts.length > 1 && !formatted.startsWith('<')) {
+        formatted = parts.map(p => {
+          if (!p.startsWith('<')) return `<p>${p}</p>`;
+          return p;
+        }).join('\n');
+      } else if (!formatted.startsWith('<')) {
+        formatted = `<p>${formatted}</p>`;
       }
+      
+      // Convert remaining newlines to <br> but preserve code blocks
+      formatted = formatted.replace(/<pre[\s\S]*?<\/pre>|<code[\s\S]*?<\/code>|(<br>)/g, (match) => {
+        return match;
+      });
+      
+      formatted = formatted.replace(/\n/g, '<br>');
       
       return formatted;
     }
     
-    // Detect programming language from code content
+    // Detect programming language
     function detectLanguage(code) {
       const codeStr = code.toLowerCase();
+      const patterns = {
+        javascript: ['function', '=>', 'const ', 'let ', 'var ', 'console.log', 'document.', 'window.'],
+        python: ['def ', 'import ', 'from ', 'class ', 'self', 'if __name__', 'print('],
+        java: ['public class', 'private void', 'System.out', 'public static', 'String[]'],
+        c: ['#include', 'int main', 'printf', 'scanf', 'stdlib.h'],
+        cpp: ['#include', 'cout <<', 'cin >>', 'namespace std', 'vector<'],
+        html: ['<!DOCTYPE', '<html', '<body', '<div', '<script'],
+        css: ['{', '}', 'margin:', 'padding:', 'color:', 'font-size'],
+        sql: ['SELECT', 'FROM', 'WHERE', 'INSERT INTO', 'UPDATE', 'DELETE'],
+        php: ['<?php', 'echo ', '$', 'function', 'return'],
+        typescript: ['interface', 'type ', ':', 'React.FC', '<T>'],
+        go: ['func ', 'package ', 'import (', 'fmt.', 'go '],
+        rust: ['fn ', 'let mut', 'println!', 'cargo', 'impl'],
+        bash: ['#!/bin', 'echo ', 'grep ', 'sudo ', 'apt-get'],
+        json: ['{', '}', '":', '",', '[']
+      };
       
-      if (codeStr.includes('function') || codeStr.includes('=>') || codeStr.includes('const ') || codeStr.includes('let ') || codeStr.includes('var ')) {
-        return 'javascript';
-      }
-      if (codeStr.includes('def ') && codeStr.includes(':')) {
-        return 'python';
-      }
-      if (codeStr.includes('public class') || codeStr.includes('private void') || codeStr.includes('System.out')) {
-        return 'java';
-      }
-      if (codeStr.includes('#include') || codeStr.includes('int main') || codeStr.includes('printf')) {
-        return 'c';
-      }
-      if (codeStr.includes('<!DOCTYPE') || codeStr.includes('<html')) {
-        return 'html';
-      }
-      if (codeStr.includes('{') && codeStr.includes('}') && codeStr.includes(':')) {
-        return 'css';
-      }
-      if (codeStr.includes('SELECT') && codeStr.includes('FROM')) {
-        return 'sql';
-      }
-      if (codeStr.includes('<?php')) {
-        return 'php';
-      }
-      if (codeStr.includes('func ') || codeStr.includes('fmt.Println')) {
-        return 'go';
-      }
-      if (codeStr.includes('fn ') || codeStr.includes('println!')) {
-        return 'rust';
-      }
-      if (codeStr.includes('using namespace') || codeStr.includes('cout <<')) {
-        return 'cpp';
-      }
-      if (codeStr.includes('console.log') || codeStr.includes('module.exports')) {
-        return 'javascript';
-      }
-      if (codeStr.includes('interface') || codeStr.includes('type ') || codeStr.includes(':')) {
-        return 'typescript';
-      }
-      if (codeStr.includes('require(') || codeStr.includes('process.')) {
-        return 'javascript';
+      for (const [lang, keywords] of Object.entries(patterns)) {
+        if (keywords.some(keyword => codeStr.includes(keyword))) {
+          return lang;
+        }
       }
       
       return 'plaintext';
@@ -1377,7 +1388,6 @@
       const contentDiv = document.getElementById(`content-${modelId}`);
       if (!contentDiv) return;
       
-      // Get text content without HTML tags
       const text = contentDiv.textContent || contentDiv.innerText;
       
       navigator.clipboard.writeText(text).then(() => {
@@ -1393,7 +1403,6 @@
       const prompt = document.getElementById('prompt').value.trim();
       const sendButton = document.getElementById('sendButton');
       
-      // Validation
       if (!prompt) {
         showStatus('Please enter a prompt', 'error');
         return;
@@ -1404,7 +1413,6 @@
         return;
       }
       
-      // Disable button
       sendButton.disabled = true;
       sendButton.innerHTML = `
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation: spin 1s linear infinite;">
@@ -1413,12 +1421,12 @@
         Processing...
       `;
       
-      // Show typing animations in all response cards
+      // Show typing animations
       selectedModels.forEach(modelId => {
         const contentDiv = document.getElementById(`content-${modelId}`);
         if (contentDiv) {
           contentDiv.innerHTML = `
-            <div class="loading">
+            <div class="typing-container">
               <div class="typing-animation">
                 <div class="typing-dot"></div>
                 <div class="typing-dot"></div>
@@ -1430,43 +1438,32 @@
         }
       });
       
-      // Hide status message
       document.getElementById('statusMessage').classList.add('hidden');
       
       try {
         const response = await fetch(API_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            prompt, 
-            models: selectedModels 
-          })
+          body: JSON.stringify({ prompt, models: selectedModels })
         });
         
-        if (!response.ok) {
-          throw new Error(`Server error: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Server error: ${response.status}`);
         
         const data = await response.json();
         
-        // Display responses
         if (data.responses && Object.keys(data.responses).length > 0) {
           for (const modelId in data.responses) {
-            const modelInfo = models.find(m => m.id === modelId);
-            const responseText = data.responses[modelId] || 'No response received';
             const contentDiv = document.getElementById(`content-${modelId}`);
-            
             if (contentDiv) {
-              contentDiv.innerHTML = formatResponse(responseText);
+              contentDiv.innerHTML = formatResponse(data.responses[modelId] || 'No response received');
             }
           }
           
-          // Apply syntax highlighting
           setTimeout(() => {
-            document.querySelectorAll('pre code').forEach((block) => {
+            document.querySelectorAll('pre code').forEach(block => {
               hljs.highlightElement(block);
             });
-          }, 100);
+          }, 50);
           
           showStatus(`Received responses from ${Object.keys(data.responses).length} model(s)`, 'success');
         } else {
@@ -1475,14 +1472,13 @@
       } catch (error) {
         console.error('Error:', error);
         
-        // Show error in all response cards
         selectedModels.forEach(modelId => {
           const contentDiv = document.getElementById(`content-${modelId}`);
           if (contentDiv) {
             contentDiv.innerHTML = `
-              <div class="error-box">
+              <div style="color: #ef4444; padding: 20px; text-align: center;">
                 <strong>Error:</strong> ${error.message}<br>
-                <p>Please check your connection or try again later.</p>
+                <p style="margin-top: 10px;">Please check your connection or try again later.</p>
               </div>
             `;
           }
@@ -1490,7 +1486,6 @@
         
         showStatus(`Error: ${error.message}`, 'error');
       } finally {
-        // Re-enable button
         sendButton.disabled = false;
         sendButton.innerHTML = `
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1503,19 +1498,16 @@
     
     // Setup event listeners
     function setupEventListeners() {
-      // Enter key to send prompt (Ctrl+Enter or Cmd+Enter)
       document.getElementById('prompt').addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
           sendPrompt();
         }
       });
       
-      // Clear status message on prompt focus
       document.getElementById('prompt').addEventListener('focus', () => {
         document.getElementById('statusMessage').classList.add('hidden');
       });
       
-      // Handle window resize
       window.addEventListener('resize', () => {
         updateResponsesGrid();
       });
