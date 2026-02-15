@@ -4,181 +4,1525 @@
   <meta charset="UTF-8" />
   <title>STWAI – Multi-AI Chat</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
+  <!-- Font for better typography -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+
+  <!-- Highlight.js for code syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  
+  <!-- Load all common languages -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/java.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/cpp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/csharp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/go.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/rust.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/json.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/html.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/css.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/typescript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/php.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/ruby.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/swift.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/kotlin.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/scala.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/perl.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/markdown.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/yaml.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/dockerfile.min.js"></script>
 
   <style>
-    body {
-      background: #121212;
-      color: #eee;
-      font-family: system-ui, sans-serif;
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #151515;
+      --bg-tertiary: #202020;
+      --border-color: #333;
+      --text-primary: #ffffff;
+      --text-secondary: #a0a0a0;
+      --accent-primary: #10a37f;
+      --accent-hover: #0d8c6d;
+      --accent-secondary: #6366f1;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      --code-bg: #1a1a1a;
+      --inline-code-bg: #2a2a2a;
+      --code-comment: #6a9955;
+      --code-keyword: #569cd6;
+      --code-string: #ce9178;
+      --code-function: #dcdcaa;
+      --code-number: #b5cea8;
+      --code-operator: #d4d4d4;
     }
 
-    textarea {
-      width: 100%;
-      min-height: 90px;
-      padding: 12px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Header */
+    .header {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background: rgba(10, 10, 10, 0.95);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo span {
+      color: var(--accent-primary);
+      background: linear-gradient(135deg, #10a37f, #0d8c6d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .tagline {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 6px;
+    }
+
+    /* Main Layout */
+    .main-layout {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      padding: 28px 0;
+    }
+
+    @media (min-width: 1024px) {
+      .main-layout {
+        flex-direction: row;
+      }
+    }
+
+    /* Models Panel */
+    .models-panel {
+      flex: 0 0 auto;
+    }
+
+    @media (min-width: 1024px) {
+      .models-panel {
+        width: 340px;
+      }
+    }
+
+    .panel-card {
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s;
+    }
+
+    .panel-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .panel-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-primary);
+    }
+
+    .models-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .models-grid::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .models-grid::-webkit-scrollbar-track {
+      background: var(--bg-tertiary);
+      border-radius: 3px;
+    }
+
+    .models-grid::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 3px;
+    }
+
+    .models-grid::-webkit-scrollbar-thumb:hover {
+      background: var(--accent-primary);
+    }
+
+    .model-option {
+      display: flex;
+      align-items: center;
+      padding: 14px;
+      background: var(--bg-tertiary);
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .model-option:hover {
+      border-color: var(--accent-primary);
+      background: rgba(16, 163, 127, 0.1);
+      transform: translateX(4px);
+    }
+
+    .model-option input[type="checkbox"] {
+      margin-right: 14px;
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent-primary);
+      cursor: pointer;
+    }
+
+    .model-name {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .model-free {
+      font-size: 11px;
+      color: var(--accent-primary);
+      margin-left: auto;
+      background: rgba(16, 163, 127, 0.15);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+
+    .counter {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Chat Area */
+    .chat-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 80vh;
+      gap: 28px;
+    }
+
+    /* Responses Section at TOP */
+    .responses-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .responses-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .responses-title {
+      font-size: 18px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #10a37f, #6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .layout-toggle {
+      display: flex;
+      background: var(--bg-tertiary);
+      border-radius: 10px;
+      padding: 4px;
+      border: 1px solid var(--border-color);
+      gap: 4px;
+    }
+
+    .layout-btn {
+      padding: 8px 16px;
       border-radius: 8px;
+      background: none;
       border: none;
-      background: #1f1f1f;
-      color: #fff;
+      color: var(--text-secondary);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .layout-btn.active {
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    .responses-container {
+      display: grid;
+      gap: 24px;
+      flex: 1;
+      min-height: 500px;
+    }
+
+    /* Response Cards */
+    .response-card {
+      background: var(--bg-secondary);
+      border-radius: 20px;
+      padding: 28px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .response-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .response-card:hover::before {
+      opacity: 1;
+    }
+
+    .response-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .response-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .model-badge {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .model-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(16, 163, 127, 0.3);
+    }
+
+    .response-content {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-primary);
+      padding-right: 4px;
+    }
+
+    /* Professional Code Formatting */
+    .response-content pre {
+      background: var(--code-bg);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      position: relative;
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .response-content pre::before {
+      content: attr(data-language);
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: white;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 0 12px 0 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .response-content code {
+      font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      background: var(--inline-code-bg);
+      padding: 3px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      color: #e6e6e6;
+    }
+
+    .response-content pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 14px;
+      color: #f8f8f2;
+      display: block;
+      line-height: 1.6;
+      font-family: 'Fira Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+    }
+
+    /* Enhanced Syntax Highlighting */
+    .hljs-keyword { color: #569cd6; font-weight: 600; }
+    .hljs-string { color: #ce9178; }
+    .hljs-comment { color: #6a9955; font-style: italic; }
+    .hljs-function { color: #dcdcaa; }
+    .hljs-number { color: #b5cea8; }
+    .hljs-operator { color: #d4d4d4; }
+    .hljs-class { color: #4ec9b0; }
+    .hljs-variable { color: #9cdcfe; }
+    .hljs-parameter { color: #9cdcfe; }
+    .hljs-type { color: #4ec9b0; }
+    .hljs-property { color: #9cdcfe; }
+    .hljs-constant { color: #4fc1ff; }
+    .hljs-regexp { color: #d16969; }
+    .hljs-symbol { color: #dcdcaa; }
+    .hljs-bullet { color: #dcdcaa; }
+    .hljs-built_in { color: #4ec9b0; }
+    .hljs-title { color: #dcdcaa; }
+    .hljs-attr { color: #9cdcfe; }
+    .hljs-name { color: #569cd6; }
+    .hljs-tag { color: #569cd6; }
+    .hljs-meta { color: #4ec9b0; }
+
+    /* Tables */
+    .response-content table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 24px 0;
+      background: var(--bg-tertiary);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
       font-size: 14px;
     }
 
-    button {
-      margin-top: 12px;
-      padding: 10px 18px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      background: #4f46e5;
+    .response-content thead {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    }
+
+    .response-content th {
       color: white;
+      font-weight: 600;
+      text-align: left;
+      padding: 16px 20px;
+      font-size: 14px;
+    }
+
+    .response-content td {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .response-content tbody tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .response-content tbody tr:hover {
+      background: rgba(16, 163, 127, 0.08);
+    }
+
+    /* Lists */
+    .response-content ul, .response-content ol {
+      margin: 20px 0 20px 32px;
+      padding-left: 8px;
+    }
+
+    .response-content li {
+      margin: 8px 0;
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+
+    .response-content li::marker {
+      color: var(--accent-primary);
+    }
+
+    /* Blockquotes */
+    .response-content blockquote {
+      border-left: 4px solid var(--accent-primary);
+      margin: 24px 0;
+      padding: 20px 28px;
+      color: var(--text-secondary);
+      font-style: italic;
+      background: rgba(16, 163, 127, 0.08);
+      border-radius: 0 16px 16px 0;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    /* Headers */
+    .response-content h1 {
+      font-size: 26px;
+      margin: 28px 0 22px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--accent-primary);
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff, #e0e0e0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .response-content h2 {
+      font-size: 22px;
+      margin: 26px 0 20px;
+      color: var(--accent-primary);
       font-weight: 600;
     }
 
-    button:hover {
-      background: #6366f1;
+    .response-content h3 {
+      font-size: 18px;
+      margin: 22px 0 16px;
+      font-weight: 600;
+      color: var(--text-primary);
     }
 
-    .models label {
-      display: block;
-      margin: 6px 0;
+    .response-content h4 {
+      font-size: 16px;
+      margin: 20px 0 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    /* Paragraphs */
+    .response-content p {
+      margin: 18px 0;
+      color: var(--text-primary);
+      line-height: 1.9;
+    }
+
+    .response-content p:first-of-type {
+      margin-top: 0;
+    }
+
+    .response-content p:last-of-type {
+      margin-bottom: 0;
+    }
+
+    /* Special boxes */
+    .response-content .note {
+      background: rgba(16, 163, 127, 0.1);
+      border-left: 4px solid var(--accent-primary);
+      padding: 18px 24px;
+      margin: 24px 0;
+      border-radius: 0 12px 12px 0;
+      font-size: 15px;
+      position: relative;
+    }
+
+    .response-content .warning {
+      background: rgba(255, 193, 7, 0.1);
+      border-left: 4px solid #ffc107;
+      padding: 18px 24px;
+      margin: 24px 0;
+      border-radius: 0 12px 12px 0;
+    }
+
+    .response-content .error-box {
+      background: rgba(239, 68, 68, 0.1);
+      border-left: 4px solid #ef4444;
+      padding: 18px 24px;
+      margin: 24px 0;
+      border-radius: 0 12px 12px 0;
+    }
+
+    /* Horizontal Rule */
+    .response-content hr {
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+      margin: 32px 0;
+    }
+
+    /* Prompt Container at BOTTOM */
+    .prompt-container {
+      background: var(--bg-secondary);
+      border-radius: 20px;
+      padding: 28px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow);
+      transition: transform 0.2s;
+    }
+
+    .prompt-container:hover {
+      transform: translateY(-2px);
+    }
+
+    .prompt-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 18px;
+      color: var(--text-primary);
+    }
+
+    .prompt-textarea {
+      width: 100%;
+      min-height: 160px;
+      padding: 20px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 15px;
+      resize: vertical;
+      transition: all 0.2s;
+      line-height: 1.7;
+    }
+
+    .prompt-textarea:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 4px rgba(16, 163, 127, 0.15);
+    }
+
+    .send-button {
+      margin-top: 22px;
+      padding: 16px 32px;
+      border-radius: 14px;
+      border: none;
       cursor: pointer;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: white;
+      font-weight: 600;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s;
+      width: 100%;
+      justify-content: center;
+      letter-spacing: 0.5px;
+    }
+
+    .send-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(16, 163, 127, 0.3);
+    }
+
+    .send-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Loading States */
+    .loading {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 250px;
+      gap: 20px;
+    }
+
+    .typing-animation {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .typing-dot {
+      width: 12px;
+      height: 12px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      border-radius: 50%;
+      animation: typing 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    .typing-dot:nth-child(3) { animation-delay: 0s; }
+
+    @keyframes typing {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+      30% { transform: translateY(-12px); opacity: 1; }
+    }
+
+    .loading-text {
+      color: var(--text-secondary);
       font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
     }
 
-    .response {
-      background: #1a1a1a;
-      padding: 12px;
+    /* Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .action-button {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
       border-radius: 10px;
-      margin-top: 12px;
-      white-space: pre-wrap;
-      border: 1px solid #333;
-    }
-
-    h3 {
-      margin-top: 24px;
-      margin-bottom: 8px;
-    }
-
-    .note {
+      padding: 8px 16px;
       font-size: 13px;
-      opacity: 0.8;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+    }
+
+    .action-button:hover {
+      background: var(--accent-primary);
+      color: white;
+      border-color: var(--accent-primary);
+      transform: translateY(-1px);
+    }
+
+    .copy-button {
+      background: rgba(16, 163, 127, 0.1);
+      border: 1px solid rgba(16, 163, 127, 0.3);
+      color: var(--accent-primary);
+    }
+
+    .copy-button:hover {
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 24px 0;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 13px;
+      border-top: 1px solid var(--border-color);
+      margin-top: 40px;
+    }
+
+    /* Mobile Optimizations */
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 16px;
+      }
+      
+      .header {
+        padding: 20px 0;
+      }
+      
+      .logo {
+        font-size: 22px;
+      }
+      
+      .panel-card, .prompt-container, .response-card {
+        padding: 20px;
+      }
+      
+      .responses-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .layout-toggle {
+        align-self: flex-start;
+      }
+      
+      .responses-container {
+        grid-template-columns: 1fr !important;
+      }
+      
+      .response-content {
+        font-size: 14px;
+      }
+      
+      .response-content h1 {
+        font-size: 22px;
+      }
+      
+      .response-content h2 {
+        font-size: 20px;
+      }
+      
+      .response-content h3 {
+        font-size: 17px;
+      }
+      
+      .response-content pre {
+        padding: 16px;
+        margin: 20px 0;
+      }
+      
+      .response-content pre::before {
+        padding: 4px 12px;
+        font-size: 11px;
+      }
+      
+      .model-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+      }
+      
+      .prompt-textarea {
+        min-height: 140px;
+        padding: 16px;
+      }
+      
+      .send-button {
+        padding: 14px 24px;
+        font-size: 15px;
+      }
+      
+      .action-button {
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+    }
+
+    /* Grid Layout Classes */
+    .grid-1 { grid-template-columns: 1fr; }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    
+    @media (min-width: 1200px) {
+      .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    }
+    
+    @media (min-width: 1024px) and (max-width: 1199px) {
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* Utilities */
+    .hidden {
+      display: none !important;
+    }
+
+    .status-message {
+      padding: 16px 22px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid transparent;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .status-error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+
+    .status-success {
+      background: rgba(16, 163, 127, 0.1);
+      color: var(--accent-primary);
+      border-color: rgba(16, 163, 127, 0.2);
+    }
+
+    .status-info {
+      background: rgba(99, 102, 241, 0.1);
+      color: #6366f1;
+      border-color: rgba(99, 102, 241, 0.2);
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 17L12 22L22 17" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 12L12 17L22 12" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="gradient" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#10a37f"/>
+              <stop offset="100%" stop-color="#6366f1"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        STW<span>AI</span>
+      </div>
+      <p class="tagline">Compare multiple AI models side-by-side with professional code formatting</p>
+    </header>
 
-<h1>STWAI – Multi-AI Chat</h1>
-<p>Select up to <b>4 AI models</b> and send one prompt to all.</p>
+    <!-- Main Content -->
+    <div class="main-layout">
+      <!-- Models Panel -->
+      <div class="models-panel">
+        <div class="panel-card">
+          <h3 class="panel-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#10a37f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Available Models
+          </h3>
+          
+          <div class="models-grid" id="modelsContainer">
+            <!-- Models will be populated by JavaScript -->
+          </div>
+          
+          <div class="counter">
+            <span>Selected: <span id="selectedCount">0</span> / 4</span>
+            <span id="selectionStatus">Max 4 models</span>
+          </div>
+        </div>
+        
+        <div class="panel-card">
+          <h3 class="panel-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13 16H12C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8H16M13 12H16M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#10a37f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            How to Use
+          </h3>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.8;">
+            1. Select up to 4 AI models from the list<br>
+            2. Enter your prompt in the text area below<br>
+            3. Click "Send Prompt" or press Ctrl/Cmd + Enter<br>
+            4. Compare responses with professional formatting
+          </p>
+        </div>
+      </div>
+      
+      <!-- Chat Area -->
+      <div class="chat-area">
+        <!-- Responses Section at TOP -->
+        <div class="responses-section">
+          <div class="responses-header">
+            <h3 class="responses-title">AI Responses</h3>
+            <div class="layout-toggle">
+              <button class="layout-btn active" id="sideBySideBtn" onclick="setLayout('side-by-side')">
+                Side-by-Side
+              </button>
+              <button class="layout-btn" id="stackedBtn" onclick="setLayout('stacked')">
+                Stacked
+              </button>
+            </div>
+          </div>
+          
+          <!-- Status Messages -->
+          <div id="statusMessage" class="hidden"></div>
+          
+          <!-- Responses Container -->
+          <div class="responses-container" id="responsesContainer">
+            <!-- Responses will be dynamically inserted here -->
+            <div id="output"></div>
+          </div>
+        </div>
+        
+        <!-- Prompt Container at BOTTOM -->
+        <div class="prompt-container">
+          <h3 class="prompt-title">Your Prompt</h3>
+          <textarea class="prompt-textarea" id="prompt" placeholder="Ask anything to multiple AI models simultaneously...&#10;Example: 'Write a function to calculate fibonacci in Python'"></textarea>
+          <button class="send-button" id="sendButton" onclick="sendPrompt()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Send Prompt
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+      <p>STWAI – Multi-AI Chat Interface | Professional code formatting for all AI responses</p>
+    </footer>
+  </div>
 
-<div class="models">
-  <h3>Available Models</h3>
-
-  <label>
-    <input type="checkbox" value="nvidia/nemotron-3-nano-30b-a3b:free">
-    Nemotron-3 Nano 30B (FREE)
-  </label>
-
-  <label>
-    <input type="checkbox" value="nvidia/nemotron-nano-12b-v2-vl:free">
-    Nemotron Nano 12B V2-VL (FREE)
-  </label>
-
-  <label>
-    <input type="checkbox" value="deepseek/deepseek-r1">
-    DeepSeek-R1
-  </label>
-
-  <label>
-    <input type="checkbox" value="meta-llama/llama-3-70b-instruct">
-    LLaMA-3 70B
-  </label>
-
-  <label>
-    <input type="checkbox" value="meta-llama/llama-3.3-70b-instruct:free">
-    LLaMA-3.3 70B (FREE)
-  </label>
-
-  <label>
-    <input type="checkbox" value="mistralai/mixtral-8x7b-instruct">
-    Mixtral 8×7B
-  </label>
-
-  <label>
-    <input type="checkbox" value="liquid/lfm-2.5-1.2b-instruct:free">
-    Liquid LFM-2.5 1.2B (FREE)
-  </label>
-
-  <label>
-    <input type="checkbox" value="google/gemma-3n-e2b-it:free">
-    Gemma-3N E2B-IT (FREE)
-  </label>
-
-  <label>
-    <input type="checkbox" value="google/gemma-3n-e4b-it:free">
-    Gemma-3N E4B-IT (FREE)
-  </label>
-
-  <p class="note">⚠ Max 4 models allowed per request</p>
-</div>
-
-<h3>Prompt</h3>
-<textarea id="prompt" placeholder="Ask anything…"></textarea>
-
-<button onclick="send()">Send Prompt</button>
-
-<div id="output"></div>
-
-<script>
-const API_URL = "https://stwai.vercel.app/api/chat"; // change if needed
-
-function send() {
-  const prompt = document.getElementById("prompt").value.trim();
-  const checked = [...document.querySelectorAll("input[type=checkbox]:checked")];
-
-  if (!prompt) {
-    alert("Please enter a prompt");
-    return;
-  }
-
-  if (checked.length === 0) {
-    alert("Select at least one model");
-    return;
-  }
-
-  if (checked.length > 4) {
-    alert("You can select maximum 4 models");
-    return;
-  }
-
-  const models = checked.map(cb => cb.value);
-  const output = document.getElementById("output");
-
-  output.innerHTML = "<p>⏳ Waiting for AI responses...</p>";
-
-  fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt, models })
-  })
-  .then(res => res.json())
-  .then(data => {
-    output.innerHTML = "";
-
-    for (const model in data.responses) {
-      const div = document.createElement("div");
-      div.className = "response";
-      div.innerHTML = `<b>${model}</b>\n\n${data.responses[model]}`;
-      output.appendChild(div);
+  <script>
+    const API_URL = "https://stwai.vercel.app/api/chat";
+    
+    // Available models data
+    const models = [
+      { id: "nvidia/nemotron-3-nano-30b-a3b:free", name: "Nemotron-3 Nano 30B", free: true },
+      { id: "nvidia/nemotron-nano-12b-v2-vl:free", name: "Nemotron Nano 12B V2-VL", free: true },
+      { id: "deepseek/deepseek-r1", name: "DeepSeek-R1", free: false },
+      { id: "meta-llama/llama-3-70b-instruct", name: "LLaMA-3 70B", free: false },
+      { id: "meta-llama/llama-3.3-70b-instruct:free", name: "LLaMA-3.3 70B", free: true },
+      { id: "mistralai/mixtral-8x7b-instruct", name: "Mixtral 8×7B", free: false },
+      { id: "liquid/lfm-2.5-1.2b-instruct:free", name: "Liquid LFM-2.5 1.2B", free: true },
+      { id: "google/gemma-3n-e2b-it:free", name: "Gemma-3N E2B-IT", free: true },
+      { id: "google/gemma-3n-e4b-it:free", name: "Gemma-3N E4B-IT", free: true }
+    ];
+    
+    // Current state
+    let selectedModels = [];
+    let currentLayout = 'side-by-side';
+    
+    // Initialize the page
+    function init() {
+      renderModels();
+      updateSelectedCount();
+      setupEventListeners();
+      updateResponsesGrid();
     }
-  })
-  .catch(err => {
-    output.innerHTML = `<div class="response">❌ Error: ${err}</div>`;
-  });
-}
-</script>
-
+    
+    // Render available models
+    function renderModels() {
+      const container = document.getElementById('modelsContainer');
+      container.innerHTML = '';
+      
+      models.forEach(model => {
+        const option = document.createElement('div');
+        option.className = 'model-option';
+        option.innerHTML = `
+          <input type="checkbox" value="${model.id}" id="${model.id}">
+          <label for="${model.id}" class="model-name">${model.name}</label>
+          ${model.free ? '<span class="model-free">FREE</span>' : ''}
+        `;
+        
+        container.appendChild(option);
+      });
+      
+      // Add event listeners to checkboxes
+      document.querySelectorAll('.model-option input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', handleModelSelection);
+      });
+    }
+    
+    // Handle model selection
+    function handleModelSelection() {
+      const checkedBoxes = document.querySelectorAll('.model-option input[type="checkbox"]:checked');
+      selectedModels = Array.from(checkedBoxes).map(cb => cb.value);
+      
+      // Limit to 4 selections
+      if (selectedModels.length > 4) {
+        this.checked = false;
+        selectedModels = selectedModels.filter(id => id !== this.value);
+        showStatus('You can select maximum 4 models', 'error');
+      }
+      
+      updateSelectedCount();
+      updateResponsesGrid();
+    }
+    
+    // Update selected models counter
+    function updateSelectedCount() {
+      const countElement = document.getElementById('selectedCount');
+      const statusElement = document.getElementById('selectionStatus');
+      
+      countElement.textContent = selectedModels.length;
+      
+      if (selectedModels.length === 0) {
+        statusElement.textContent = 'Select at least 1 model';
+        statusElement.style.color = 'var(--text-secondary)';
+      } else if (selectedModels.length === 4) {
+        statusElement.textContent = 'Maximum reached';
+        statusElement.style.color = '#ef4444';
+      } else {
+        statusElement.textContent = 'Max 4 models';
+        statusElement.style.color = 'var(--text-secondary)';
+      }
+    }
+    
+    // Update responses grid based on selected models count
+    function updateResponsesGrid() {
+      const container = document.getElementById('responsesContainer');
+      const count = Math.max(selectedModels.length, 1);
+      
+      // Clear current content
+      container.innerHTML = '';
+      
+      // Update grid classes
+      container.className = 'responses-container';
+      if (currentLayout === 'stacked') {
+        container.classList.add('grid-1');
+      } else {
+        if (window.innerWidth <= 768) {
+          container.classList.add('grid-1');
+        } else if (count === 1) {
+          container.classList.add('grid-1');
+        } else if (count === 2) {
+          container.classList.add('grid-2');
+        } else if (count === 3) {
+          container.classList.add('grid-3');
+        } else {
+          container.classList.add('grid-4');
+        }
+      }
+      
+      // Create empty response cards for each selected model
+      if (selectedModels.length > 0) {
+        selectedModels.forEach(modelId => {
+          const modelInfo = models.find(m => m.id === modelId);
+          if (modelInfo) {
+            const card = createEmptyResponseCard(modelInfo);
+            container.appendChild(card);
+          }
+        });
+      } else {
+        // Show empty state when no models selected
+        const emptyCard = document.createElement('div');
+        emptyCard.className = 'response-card';
+        emptyCard.innerHTML = `
+          <div class="response-header">
+            <div class="model-badge">
+              <div class="model-icon">🤖</div>
+              <span>No Model Selected</span>
+            </div>
+          </div>
+          <div class="response-content">
+            <div class="note">
+              <strong>Select AI models</strong> from the left panel to see their responses here.
+            </div>
+          </div>
+        `;
+        container.appendChild(emptyCard);
+      }
+    }
+    
+    // Create empty response card
+    function createEmptyResponseCard(modelInfo) {
+      const card = document.createElement('div');
+      card.className = 'response-card';
+      card.id = `card-${modelInfo.id}`;
+      card.innerHTML = `
+        <div class="response-header">
+          <div class="model-badge">
+            <div class="model-icon">${modelInfo.name.charAt(0)}</div>
+            <span>${modelInfo.name}</span>
+          </div>
+          <div class="action-buttons">
+            ${modelInfo.free ? '<span class="model-free">FREE</span>' : ''}
+            <button class="action-button copy-button" onclick="copyResponse('${modelInfo.id}')" title="Copy response">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 16H6C4.89543 16 4 15.1046 4 14V6C4 4.89543 4.89543 4 6 4H14C15.1046 4 16 4.89543 16 6V8M10 20H18C19.1046 20 20 19.1046 20 18V10C20 8.89543 19.1046 8 18 8H10C8.89543 8 8 8.89543 8 10V18C8 19.1046 8.89543 20 10 20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Copy
+            </button>
+          </div>
+        </div>
+        <div class="response-content" id="content-${modelInfo.id}">
+          <div class="loading">
+            <div class="typing-animation">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+            <p class="loading-text">Waiting for response from ${modelInfo.name}...</p>
+          </div>
+        </div>
+      `;
+      return card;
+    }
+    
+    // Set response layout
+    function setLayout(layout) {
+      currentLayout = layout;
+      const sideBySideBtn = document.getElementById('sideBySideBtn');
+      const stackedBtn = document.getElementById('stackedBtn');
+      
+      // Update button states
+      if (layout === 'side-by-side') {
+        sideBySideBtn.classList.add('active');
+        stackedBtn.classList.remove('active');
+      } else {
+        stackedBtn.classList.add('active');
+        sideBySideBtn.classList.remove('active');
+      }
+      
+      updateResponsesGrid();
+    }
+    
+    // Show status message
+    function showStatus(message, type = 'info') {
+      const statusElement = document.getElementById('statusMessage');
+      statusElement.textContent = message;
+      statusElement.className = `status-message status-${type}`;
+      statusElement.classList.remove('hidden');
+      
+      // Auto-hide info messages after 5 seconds
+      if (type === 'info' || type === 'success') {
+        setTimeout(() => {
+          statusElement.classList.add('hidden');
+        }, 5000);
+      }
+    }
+    
+    // Professional code formatter with proper language detection
+    function formatResponse(text) {
+      if (!text) return '<p>No response received</p>';
+      
+      let formatted = text;
+      
+      // Preserve line breaks and paragraphs
+      formatted = formatted.replace(/\n\n+/g, '</p><p>');
+      
+      // Format headers with proper hierarchy
+      formatted = formatted.replace(/^#### (.*$)/gm, '<h4>$1</h4>');
+      formatted = formatted.replace(/^### (.*$)/gm, '<h3>$1</h3>');
+      formatted = formatted.replace(/^## (.*$)/gm, '<h2>$1</h2>');
+      formatted = formatted.replace(/^# (.*$)/gm, '<h1>$1</h1>');
+      
+      // Professional code block formatting with language detection
+      formatted = formatted.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
+        const language = lang || detectLanguage(code);
+        const escapedCode = escapeHtml(code.trim());
+        return `<pre data-language="${language}"><code class="language-${language}">${escapedCode}</code></pre>`;
+      });
+      
+      // Format inline code
+      formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+      
+      // Format bold and italic
+      formatted = formatted.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+      formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+      
+      // Format tables (markdown style)
+      formatted = formatted.replace(/\|([^\n]+)\|\n\|([-:| ]+)+\|\n((?:\|[^\n]+\|\n?)+)/g, (match, headerRow, separatorRow, dataRows) => {
+        const headers = headerRow.split('|').filter(h => h.trim()).map(h => h.trim());
+        const rows = dataRows.trim().split('\n').filter(r => r.trim());
+        
+        let tableHtml = '<table><thead><tr>';
+        headers.forEach(header => {
+          tableHtml += `<th>${header}</th>`;
+        });
+        tableHtml += '</tr></thead><tbody>';
+        
+        rows.forEach(row => {
+          const cells = row.split('|').filter(c => c.trim()).map(c => c.trim());
+          if (cells.length === headers.length) {
+            tableHtml += '<tr>';
+            cells.forEach(cell => {
+              tableHtml += `<td>${cell}</td>`;
+            });
+            tableHtml += '</tr>';
+          }
+        });
+        
+        tableHtml += '</tbody></table>';
+        return tableHtml;
+      });
+      
+      // Format unordered lists
+      formatted = formatted.replace(/^\s*[-*+]\s+(.+)/gm, '<li>$1</li>');
+      formatted = formatted.replace(/(<li>.*<\/li>\n?)+/g, (match) => {
+        return '<ul>' + match + '</ul>';
+      });
+      
+      // Format ordered lists
+      formatted = formatted.replace(/^\s*\d+\.\s+(.+)/gm, '<li>$1</li>');
+      formatted = formatted.replace(/(<li>.*<\/li>\n?)+/g, (match) => {
+        return '<ol>' + match + '</ol>';
+      });
+      
+      // Format blockquotes
+      formatted = formatted.replace(/^>\s*(.+)/gm, '<blockquote>$1</blockquote>');
+      
+      // Format special boxes
+      formatted = formatted.replace(/^📝\s*(.+)/gm, '<div class="note">$1</div>');
+      formatted = formatted.replace(/^⚠️\s*(.+)/gm, '<div class="warning">$1</div>');
+      formatted = formatted.replace(/^❌\s*(.+)/gm, '<div class="error-box">$1</div>');
+      
+      // Format horizontal rules
+      formatted = formatted.replace(/^---$/gm, '<hr>');
+      formatted = formatted.replace(/^___$/gm, '<hr>');
+      formatted = formatted.replace(/^\*\*\*$/gm, '<hr>');
+      
+      // Convert remaining newlines to <br>
+      formatted = formatted.replace(/\n/g, '<br>');
+      
+      // Wrap in paragraph if not already wrapped
+      if (!formatted.startsWith('<') || formatted.startsWith('<br')) {
+        formatted = '<p>' + formatted + '</p>';
+      }
+      
+      return formatted;
+    }
+    
+    // Detect programming language from code content
+    function detectLanguage(code) {
+      const codeStr = code.toLowerCase();
+      
+      if (codeStr.includes('function') || codeStr.includes('=>') || codeStr.includes('const ') || codeStr.includes('let ') || codeStr.includes('var ')) {
+        return 'javascript';
+      }
+      if (codeStr.includes('def ') && codeStr.includes(':')) {
+        return 'python';
+      }
+      if (codeStr.includes('public class') || codeStr.includes('private void') || codeStr.includes('System.out')) {
+        return 'java';
+      }
+      if (codeStr.includes('#include') || codeStr.includes('int main') || codeStr.includes('printf')) {
+        return 'c';
+      }
+      if (codeStr.includes('<!DOCTYPE') || codeStr.includes('<html')) {
+        return 'html';
+      }
+      if (codeStr.includes('{') && codeStr.includes('}') && codeStr.includes(':')) {
+        return 'css';
+      }
+      if (codeStr.includes('SELECT') && codeStr.includes('FROM')) {
+        return 'sql';
+      }
+      if (codeStr.includes('<?php')) {
+        return 'php';
+      }
+      if (codeStr.includes('func ') || codeStr.includes('fmt.Println')) {
+        return 'go';
+      }
+      if (codeStr.includes('fn ') || codeStr.includes('println!')) {
+        return 'rust';
+      }
+      if (codeStr.includes('using namespace') || codeStr.includes('cout <<')) {
+        return 'cpp';
+      }
+      if (codeStr.includes('console.log') || codeStr.includes('module.exports')) {
+        return 'javascript';
+      }
+      if (codeStr.includes('interface') || codeStr.includes('type ') || codeStr.includes(':')) {
+        return 'typescript';
+      }
+      if (codeStr.includes('require(') || codeStr.includes('process.')) {
+        return 'javascript';
+      }
+      
+      return 'plaintext';
+    }
+    
+    // Escape HTML
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    // Copy response to clipboard
+    function copyResponse(modelId) {
+      const contentDiv = document.getElementById(`content-${modelId}`);
+      if (!contentDiv) return;
+      
+      // Get text content without HTML tags
+      const text = contentDiv.textContent || contentDiv.innerText;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        showStatus('Response copied to clipboard!', 'success');
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+        showStatus('Failed to copy response', 'error');
+      });
+    }
+    
+    // Send prompt to API
+    async function sendPrompt() {
+      const prompt = document.getElementById('prompt').value.trim();
+      const sendButton = document.getElementById('sendButton');
+      
+      // Validation
+      if (!prompt) {
+        showStatus('Please enter a prompt', 'error');
+        return;
+      }
+      
+      if (selectedModels.length === 0) {
+        showStatus('Select at least one model', 'error');
+        return;
+      }
+      
+      // Disable button
+      sendButton.disabled = true;
+      sendButton.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation: spin 1s linear infinite;">
+          <path d="M12 2V6M12 18V22M6 12H2M22 12H18M19.07 4.93L16.24 7.76M7.76 16.24L4.93 19.07M19.07 19.07L16.24 16.24M7.76 7.76L4.93 4.93" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Processing...
+      `;
+      
+      // Show typing animations in all response cards
+      selectedModels.forEach(modelId => {
+        const contentDiv = document.getElementById(`content-${modelId}`);
+        if (contentDiv) {
+          contentDiv.innerHTML = `
+            <div class="loading">
+              <div class="typing-animation">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+              </div>
+              <p class="loading-text">Generating response...</p>
+            </div>
+          `;
+        }
+      });
+      
+      // Hide status message
+      document.getElementById('statusMessage').classList.add('hidden');
+      
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            prompt, 
+            models: selectedModels 
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error(`Server error: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Display responses
+        if (data.responses && Object.keys(data.responses).length > 0) {
+          for (const modelId in data.responses) {
+            const modelInfo = models.find(m => m.id === modelId);
+            const responseText = data.responses[modelId] || 'No response received';
+            const contentDiv = document.getElementById(`content-${modelId}`);
+            
+            if (contentDiv) {
+              contentDiv.innerHTML = formatResponse(responseText);
+            }
+          }
+          
+          // Apply syntax highlighting
+          setTimeout(() => {
+            document.querySelectorAll('pre code').forEach((block) => {
+              hljs.highlightElement(block);
+            });
+          }, 100);
+          
+          showStatus(`Received responses from ${Object.keys(data.responses).length} model(s)`, 'success');
+        } else {
+          showStatus('No responses received from the API', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        
+        // Show error in all response cards
+        selectedModels.forEach(modelId => {
+          const contentDiv = document.getElementById(`content-${modelId}`);
+          if (contentDiv) {
+            contentDiv.innerHTML = `
+              <div class="error-box">
+                <strong>Error:</strong> ${error.message}<br>
+                <p>Please check your connection or try again later.</p>
+              </div>
+            `;
+          }
+        });
+        
+        showStatus(`Error: ${error.message}`, 'error');
+      } finally {
+        // Re-enable button
+        sendButton.disabled = false;
+        sendButton.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Send Prompt
+        `;
+      }
+    }
+    
+    // Setup event listeners
+    function setupEventListeners() {
+      // Enter key to send prompt (Ctrl+Enter or Cmd+Enter)
+      document.getElementById('prompt').addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          sendPrompt();
+        }
+      });
+      
+      // Clear status message on prompt focus
+      document.getElementById('prompt').addEventListener('focus', () => {
+        document.getElementById('statusMessage').classList.add('hidden');
+      });
+      
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        updateResponsesGrid();
+      });
+    }
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
 </body>
 </html>
