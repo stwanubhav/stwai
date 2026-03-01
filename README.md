@@ -219,6 +219,7 @@ Contributions are welcome!
 ## 👨‍💻 Developer
 
 **Developed with 💚 by Anubhav**
+
   Version 1.3 | Experience the future of AI chat
 
 ---
