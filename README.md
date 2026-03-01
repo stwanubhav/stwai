@@ -62,13 +62,11 @@ All inside one modern and beautiful interface.
 
 ## 🚀 How It Works
 
-```
 graph LR
     A[Select Models] --> B[Enter Prompt]
     B --> C[AI Writes Live]
     C --> D[Compare Responses]
     D --> E[Copy & Use]
-```
 
 ---
 
@@ -221,7 +219,7 @@ Contributions are welcome!
 ## 👨‍💻 Developer
 
 **Developed with 💚 by Anubhav**
-Version 1.3 | Experience the future of AI chat
+  Version 1.3 | Experience the future of AI chat
 
 ---
 
