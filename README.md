@@ -62,12 +62,13 @@ All inside one modern and beautiful interface.
 
 ## 🚀 How It Works
 
+```mermaid
 graph LR
     A[Select Models] --> B[Enter Prompt]
     B --> C[AI Writes Live]
     C --> D[Compare Responses]
     D --> E[Copy & Use]
-
+```
 ---
 
 ## 🌈 Available Models
